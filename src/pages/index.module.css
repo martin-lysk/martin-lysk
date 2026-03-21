@@ -1,0 +1,106 @@
+.readme-section {
+  margin-top: 3rem;
+  text-align: left;
+  max-width: 70ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.readme-content {
+  text-align: left;
+  margin-top: 2rem;
+}
+
+.readme-content h1,
+.readme-content h2,
+.readme-content h3,
+.readme-content h4,
+.readme-content h5,
+.readme-content h6 {
+  color: var(--ifm-heading-color);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.readme-content h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.readme-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid var(--braun-orange);
+  padding-bottom: 0.5rem;
+}
+
+.readme-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.readme-content p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.readme-content a {
+  color: var(--braun-orange);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.readme-content a:hover {
+  border-bottom-color: var(--braun-orange);
+}
+
+.readme-content ul,
+.readme-content ol {
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+}
+
+.readme-content li {
+  margin-bottom: 0.5rem;
+}
+
+.readme-content code {
+  background-color: var(--braun-gray-100);
+  color: var(--braun-gray-900);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+}
+
+.readme-content pre {
+  background-color: var(--braun-gray-900);
+  color: var(--braun-gray-100);
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.readme-content pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.readme-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  border: 1px solid var(--ifm-border-color);
+}
+
+.readme-content blockquote {
+  border-left: 4px solid var(--braun-orange);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: var(--braun-gray-600);
+  font-style: italic;
+}
