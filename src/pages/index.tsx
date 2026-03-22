@@ -60,10 +60,6 @@ export default function Home(): JSX.Element {
     fetchGitHubData();
   }, []);
 
-  const createReadmeMarkup = () => {
-    return { __html: readme };
-  };
-
   return (
     <Layout title={`${siteConfig.title}`} description="Personal Blog">
       <main className="hero">
@@ -73,43 +69,44 @@ export default function Home(): JSX.Element {
           {error && <p className="text-muted">Error: {error}</p>}
 
           {profile && (
-            <>
-              <img
-                src={profile.avatar_url}
-                alt={profile.name || profile.login}
-                className="hero__avatar"
-              />
-              <h1 className="hero__title">
-                {profile.name || profile.login}
-              </h1>
-              {profile.bio && (
-                <p className="hero__subtitle">{profile.bio}</p>
-              )}
-              <div style={{ marginBottom: '2rem' }}>
-                <a
-                  href={profile.html_url}
-                  className="button button--primary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ marginRight: '1rem' }}
-                >
-                  GitHub Profile
-                </a>
-                <a href="/blog" className="button button--outline">
-                  Read Blog
-                </a>
+            <div className="hero__content">
+              {/* Left column - Profile */}
+              <div className="hero__sidebar">
+                <img
+                  src={profile.avatar_url}
+                  alt={profile.name || profile.login}
+                  className="hero__avatar"
+                />
+                <h1 className="hero__title">
+                  {profile.name || profile.login}
+                </h1>
+                {profile.bio && (
+                  <p className="hero__subtitle">{profile.bio}</p>
+                )}
+                <div className="hero__buttons">
+                  <a
+                    href={profile.html_url}
+                    className="button button--primary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    GitHub Profile
+                  </a>
+                  <a href="/blog" className="button button--outline">
+                    Read Blog
+                  </a>
+                </div>
               </div>
 
+              {/* Right column - README content */}
               {readme && (
-                <div className="readme-section">
-                  <h2>About Me</h2>
-                  <div
-                    className="readme-content"
-                    dangerouslySetInnerHTML={createReadmeMarkup()}
-                  />
+                <div className="hero__main">
+                  <div className="markdown">
+                    <div dangerouslySetInnerHTML={{ __html: readme }} />
+                  </div>
                 </div>
               )}
-            </>
+            </div>
           )}
         </div>
       </main>
