@@ -484,3 +484,9 @@ html {
   outline: 2px solid var(--braun-orange);
   outline-offset: 2px;
 }
+
+/* === GitHub-style Image Theming === */
+[data-theme='light'] img[src$='#gh-dark-mode-only'],
+[data-theme='dark'] img[src$='#gh-light-mode-only'] {
+  display: none;
+}
