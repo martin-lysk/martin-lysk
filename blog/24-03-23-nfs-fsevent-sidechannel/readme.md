@@ -5,11 +5,11 @@
 
 # Making NFS3 reactive
 
-## Introduction
-
 Network File System (NFS) provides a powerful way to built a vfs on OSx, but it has a fundamental limitation when it comes to event propagation. This article explores how event delegation works in NFS, the challenges with remote changes, and an approach to ensure proper notification delivery to client applications using a side-channel.
 
 <!-- truncate -->
+
+The topic outlined here is part of a bigger research on a Gerneral Networkf Filesystem together with the braid.org group - If you want to learn more checkout https://braid.org/apps/gnfs
 
 ## Standard File System Event Flow
 
