@@ -9,7 +9,7 @@ Network File System (NFS) provides a powerful way to built a vfs on OSx, but it 
 
 <!-- truncate -->
 
-The topic outlined here is part of a bigger research on a Gerneral Networkf Filesystem together with the braid.org group - If you want to learn more checkout https://braid.org/apps/gnfs
+The topic outlined here is part of a bigger research on a Gerneral Network Filesystem (GNFS) together with the braid.org group - If you want to learn more checkout https://braid.org/apps/gnfs
 
 ## Standard File System Event Flow
 
