@@ -1,8 +1,15 @@
-# NFS Event Delegation: Bridging the Gap Between Remote Changes and Client Notifications
+---
+  slug: nfs3-event-side-channel
+  tags: [vfs, nfs3]
+---
+
+# Making NFS3 reactive
 
 ## Introduction
 
-Network File System (NFS) provides a powerful way to built a vfs on osx, but it has a fundamental limitation when it comes to event propagation. This document explores how event delegation works in NFS, the challenges with remote changes, and an innovative solution to ensure proper notification delivery to client applications.
+Network File System (NFS) provides a powerful way to built a vfs on OSx, but it has a fundamental limitation when it comes to event propagation. This article explores how event delegation works in NFS, the challenges with remote changes, and an approach to ensure proper notification delivery to client applications using a side-channel.
+
+<!-- truncate -->
 
 ## Standard File System Event Flow
 
@@ -17,7 +24,7 @@ Before diving into NFS specifics, let's understand how file system events work i
 4. **Event Propagation**: FSEvents propagates an event with the flag `itemModified` (or similar)
 5. **Observer Notification**: Registered observers (Finder, Quick Look, etc.) react to these changes
 
-This local flow ensures seamless integration—changes made by Emacs are immediately visible in Finder's Quick Look and other observing applications.
+This flow ensures changes made by Emacs are immediately propagated to applications listening to file system changes lik Finder's Quick Look and other applications.
 
 ## NFS Event Delegation Architecture
 
@@ -36,12 +43,12 @@ In this scenario, the complete event chain functions correctly. When you work lo
 
 ## The Problem: Remote Changes
 
-The fundamental issue arises when changes originate from outside the client's local filesystem:
+An issue arises when changes originate from outside the client's local filesystem:
 
 ![FS events - client side write](./nfs_remote_change-dark.svg#gh-dark-mode-only)
 ![FS events - client side write](./nfs_remote_change-light.svg#gh-light-mode-only)
 
-**The Breakdown**: The NFS server lacks a function to call back to the client. There is no reverse notification channel, meaning the client remains unaware of changes happening remote.
+**The Breakdown**: The NFS3 protocol lacks a function to propagate changes on the server back to the client. There is no reverse notification channel, meaning the client remains unaware of changes happening remote.
 
 ### Workarounds and Limitations
 
@@ -49,16 +56,14 @@ Applications have developed various workarounds to cope with this limitation:
 
 - **Polling**: Some applications poll at regular intervals to check for changes
 - **Focus-based Checks**: Applications like VSCode check for file changes when the window regains focus
-- **Attribute Monitoring**: Some applications watch for attribute changes rather than content changes
 
 **Limitations**:
-- Not guaranteed to catch all changes
-- Finder, for example, doesn't implement polling and relies entirely on attribute change events
-- Application-dependent behavior leads to inconsistent user experience
+- The NFS client may caches file attirbutes locally even with polling the client may misses changes
+- Some applications do not poll - Finder, for example, relies entirely on attribute change events
 
 ## The Solution: Event Side Channel
 
-To address this fundamental architectural limitation, we've implemented an innovative "side channel" approach that ensures remote changes properly propagate to client observers.
+To address this architectural limitation, below, I describe a way to use a "side channel" approach to address these limitations and ensures remote changes properly propagate to client observers.
 
 ### Architecture
 
@@ -69,16 +74,18 @@ The side channel inserts an additional layer into the NFS server's event process
 
 ### How It Works
 
-1. **Remote Detection**: A remote actor performs a PUT operation on a file
-2. **Backing State Update**: The backing state is updated and notifies the NFS server
-3. **Side Channel Activation**: Instead of doing nothing, the side channel component:
+1. **Remote Detection**: A remote actor performs a change remotely - here a `put` on the backing state
+2. **Backing State Update**: the NFS server reconises the change - The backing state notifies the server via `send()`
+3. **Side Channel Activation**: Instead of doing nothing, the side channel:
    - Generates a synthetic file write operation on the file system
+   - registers a sidechannle write on the NFS Server
    - This write targets the specific file that was remotely changed
-4. **NFS Client Processing**: The NFS client receives this write operation
+4. **NFS Client Processing**: The NFS Client forwards the write operation to the NFS Server
+5. **NFS Server Processing**: The NFS Server receives the write operation and
    - It recognizes this as a side channel operation
-   - Processes the event generation logic
    - **Does not** forward the write back to the backing state (preventing loops)
-5. **Event Generation**: The NFS client, having seen a "write" on the file, now has the opportunity to trigger FSEvents
+   - And returns a success result for the write operation, together with the latest attributes of the changed file state from the backing state
+5. **Event Generation**: The NFS client, having seen a "write" on the file, now triggers an FSEvents like the write was comming from just another local application
 6. **Observer Notification**: All registered observers receive the change notification
 
 ### Key Characteristics
@@ -90,7 +97,7 @@ The side channel inserts an additional layer into the NFS server's event process
 
 ## Benefits
 
-This side channel implementation ensures that:
+This side channel approach ensures that:
 
 1. **Consistency**: Remote changes appear identical to local changes from the perspective of client applications
 2. **Real-time Updates**: No need for polling or delayed checks
@@ -99,6 +106,5 @@ This side channel implementation ensures that:
 
 ## Conclusion
 
-The NFS event delegation side channel bridges a critical gap in distributed file system event propagation. By leveraging the existing client-side event generation mechanisms through strategically placed synthetic writes, we ensure that remote changes are properly notified to all observers, maintaining the expected file system behavior across local and network boundaries.
+The NFS event delegation side channel can bridges a critical gap in distributed file system event propagation. By leveraging the existing client-side event generation mechanisms through synthetic writes, remote changes are properly notify  all observers, maintaining the expected file system behavior across local and network boundaries.
 
-This approach demonstrates how understanding the fundamental architecture of distributed systems allows us to design elegant solutions that work within existing constraints rather than fighting against them.
