@@ -30,7 +30,7 @@ const config: Config = {
           blogDescription: 'Personal blog',
           postsPerPage: 10,
           // One post per folder structure
-          routeBasePath: 'blog',
+          routeBasePath: '/',
           editUrl: undefined,
           remarkPlugins: [[require('./src/utils/remarkExtractH1.js').remarkExtractH1, { removeH1: true }]],
         } as BlogOptions,
@@ -47,8 +47,7 @@ const config: Config = {
     navbar: {
       title: 'Martin Lysk',
       items: [
-        { to: '/', label: 'Home', position: 'left' },
-        { to: '/blog', label: 'Blog', position: 'left' },
+        { to: '/', label: 'Blog', position: 'left' },
         {
           href: 'https://github.com/martin-lysk',
           label: 'GitHub',
