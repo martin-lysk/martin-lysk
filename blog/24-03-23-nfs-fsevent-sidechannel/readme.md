@@ -36,12 +36,12 @@ In this scenario, the complete event chain functions correctly. When you work lo
 
 ## The Problem: Remote Changes
 
-The fundamental issue arises when changes originate from outside the client's session. When the backing state is modified by a remote actor:
+The fundamental issue arises when changes originate from outside the client's local filesystem:
 
 ![FS events - client side write](./nfs_remote_change-dark.svg#gh-dark-mode-only)
 ![FS events - client side write](./nfs_remote_change-light.svg#gh-light-mode-only)
 
-**The Breakdown**: The NFS server lacks a function to call back to the client. There is no reverse notification channel, meaning the client remains unaware of these remote changes.
+**The Breakdown**: The NFS server lacks a function to call back to the client. There is no reverse notification channel, meaning the client remains unaware of changes happening remote.
 
 ### Workarounds and Limitations
 
