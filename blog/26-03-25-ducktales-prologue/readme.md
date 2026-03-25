@@ -42,6 +42,6 @@ Turns out the filesystem sees kind of a Renaissance:
 - Your Company is a Filesystem - https://x.com/mernit/status/2021324284875153544 and
 - Your company is not a filesystem https://x.com/anvisha/status/2022062725354967551
 
-But Filesystems need a `blockstorage` that enables `random access` and here we are - in a deep rabbit hole involving a look at nucleotide sequence alignments to find a flag in a thirty year old spec of a widely used Compression algorithm and unearthing nerdy conversation histories from the master Linus Torvalds and the maintainers of git and a lot of duct tape.
+But Filesystems need a `blockstorage` that enables `random access` and here we are - in a deep rabbit hole involving a look at nucleotide sequence alignments to find a flag in a thirty year old spec of a widely used Compression algorithm and unearthing nerdy conversation histories from git creator Linus Torvalds and the maintainers of git and a lot of duct tape.
 
 If this sounds interesting - stay tuned. 
