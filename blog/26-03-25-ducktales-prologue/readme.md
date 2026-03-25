@@ -43,6 +43,6 @@ Turns out the filesystem sees kind of a Renaissance compare:
 and 
 - Your company is not a filesystem https://x.com/anvisha/status/2022062725354967551
 
-But Filesystems need a `blockstorage` that enables `random access` and here we are - in a deeep rabithol involving a look at nucleotide sequence alignments to find a flag in a thirdy year old spec of a widely used Compression algorythem and undusting nerdy conversation histories from the master linus torvalds and the maintainers of git.
+But Filesystems need a `blockstorage` that enables `random access` and here we are - in a deeep rabithol involving a look at nucleotide sequence alignments to find a flag in a thirdy year old spec of a widely used Compression algorythem and undusting nerdy conversation histories from the master linus torvalds and the maintainers of git and a lot of duck tape.
 
 If this sounds interesting - stay tuned. 
