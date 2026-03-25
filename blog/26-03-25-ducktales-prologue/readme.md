@@ -3,26 +3,29 @@
   tags: [vfs, git, legit]
 ---
 
-# Ducktales - how to store a sqlite database in git 
+# Ducktales - A random success story
 
 ## Prologue
 
-In the upcomming series of blogposts I gonna share the results of my research over the last years. The result: A way to enable random read and write access in git's storage.
+In the upcomming series of blogposts I gonna share the results of my research over the last years.  
+
+**The result:** A way to enable **random read** and **write access** in **git**'s storage.
 
 <!-- truncate -->
 
-Random what? Do you recall the walkman and how much fun it was to find that one track on your mix tape? The Discman (with antishock) is random access.
+### Random what? - an analogy
+ Do you recall the **walkman** and how much fun it was to find that one track on your mix tape? The **Discman** (with antishock ;-) is random access.
 
 ![The grandfather of the iPod.](./walkman-orange.avif)<br/>
 Photo by [Florian Schmetz](https://unsplash.com/@floschmaezz) on Unsplash
 
-To Young? You are watching this livestream and you waiting for a specific topic that should get covered today. The recording is random access.
+*To Young?* You are watching this livestream and you waiting for a specific topic that should get covered today. The recording is random access.
 
-Random access is a core feature of every File system - It allows you to jump to a scene in your Movie (*.mpg file) skim through a huge PDF file and enables Databases like SQLite to return that one row you are interested in from a gigabyte big file even on small devices. 
+`Random access` is a core feature of every File system - It allows you to jump to your favoite second in a song (*.mp3 file) or a scene in your Movie (*.mpeg gile) skim through a huge PDF file and enables Databases like SQLite to return that one row you are interested in from a gigabyte big file even on small devices. 
 
-In git it's only possible to read and write a whole file - if you would want to access only a parts of your file, like skipping to the last chapter of a movie inside of a video file, when stored in git, you have to read the whole file once  - it’s like your Walkmans fast forward button - with a look on the discman's next button - comparable slow. File formats that are designed on the concept of random access have to fall back to the good old "fast" forward button. 
+In git it's only possible to read and write a file as a whole - if you would want to access only a parts of your file, like skipping to the last chapter of a movie inside of a video file, when stored in git, you have to read the whole file once  - it’s like your Walkmans fast forward button - compared to discman's next button - slow. File formats that are designed on the concept of random access face a bootleneck - and fall back to the good old "fast" forward button. 
 
-Why would i need a system like git to be capable of Random access in the first place? 
+### Why would i need a system like git to be capable of Random access in the first place? 
 
 At legit we had the idea to combine the awesome properties of a Filesystem with a solid git backed storage layer.
 
