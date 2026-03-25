@@ -1,6 +1,8 @@
 ---
   slug: nfs3-event-side-channel
   tags: [vfs, nfs3]
+  date: 2026-03-23
+  image: ./nfs_sidechannel_write_file-light
 ---
 
 # Making NFS3 reactive
