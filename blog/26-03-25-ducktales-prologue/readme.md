@@ -13,7 +13,8 @@ In the upcomming series of blogposts I gonna share the results of my research ov
 
 Random what? Do you recall the walkman and how much fun it was to find that one track on your mix tape? The Discman (with antishock) is random access.
 
-![The walkman](./walkman-orange.avif)
+![The grandfather of the iPod.](./walkman-orange.avif)<br/>
+Photo by [Florian Schmetz](https://unsplash.com/@floschmaezz) on Unsplash
 
 To Young? You are watching this livestream and you waiting for a specific topic that should get covered today. The recording is random access.
 
