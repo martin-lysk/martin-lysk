@@ -1,17 +1,18 @@
 ---
   slug: ducktales-prologue
   tags: [vfs, git, legit]
+  image: ./walkman-orange.avif
 ---
 
 # Ducktales - A random success story
-
-## Prologue
 
 In the upcoming series of blogposts I'm going to share the results of my research over the last years.  
 
 **The result:** A way to enable **random read** and **write access** in **git**'s storage.
 
 <!-- truncate -->
+
+## Prologue
 
 ### Random what? - an analogy
  Do you recall the **walkman** and how much fun it was to find that one track on your mix tape? The **Discman** (with anti-shock ;-) is random access.
