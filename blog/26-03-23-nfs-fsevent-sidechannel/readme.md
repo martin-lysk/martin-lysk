@@ -43,7 +43,7 @@ When a change originates from the client itself, the flow works as expected:
 
 In this scenario, the complete event chain functions correctly. When you work locally on an NFS drive, changes made in Emacs will eventually reach Finder and other observers.
 
-## The Problem: Remote Changes
+## The Problem: Remote Changes 
 
 An issue arises when changes originate from outside the client's local filesystem:
 
