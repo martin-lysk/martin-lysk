@@ -6,7 +6,7 @@ const config: Config = {
   tagline: 'Personal Blog',
   favicon: 'img/favicon.svg',
 
-  url: 'https://martinlysk.github.io',
+  url: 'https://blog.lysk.tech',
   baseUrl: '/',
 
   organizationName: 'martinlysk',
