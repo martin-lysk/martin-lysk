@@ -1,6 +1,6 @@
 ---
-  slug: sqlite-ongit-part1
-  tags: [git, legit, zlib]
+  slug: sqlite-on-git-part-1
+  tags: [git, zlib, sqlite]
 ---
 
 # SQLite on Git, Part I: The .git folder - Falling down the Rabbithole
