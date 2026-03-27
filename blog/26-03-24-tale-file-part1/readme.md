@@ -6,7 +6,7 @@
 # SQLite on Git, Part I: The .git folder - Falling down the Rabbithole
 
 Join me on a jump right into the rabbit hole on what we find when we look closer at the .git folder. 
-We'll explore how git stores your code `loose objects` and discover a flag in a 30yr old library used by git that could let us run databases inside git.
+We'll explore how git stores your code in `loose objects` and discover a flag in a 30yr old library used by git that could let us run databases inside git.
 
 <!-- truncate -->
 
