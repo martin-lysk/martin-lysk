@@ -1,7 +1,7 @@
 ---
   slug: sqlite-on-git-prologue
   tags: [vfs, git, sqlite]
-  image: ./walkman-orange.avif#
+  image: ./walkman-orange.avif
   date: 2026-03-25
 ---
 
