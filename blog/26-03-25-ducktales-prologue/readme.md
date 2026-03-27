@@ -1,7 +1,7 @@
 ---
   slug: sqlite-on-git-prologue
   tags: [vfs, git, sqlite]
-  image: ./walkman-orange.avif
+  image: ./walkman-orange.jpg
   date: 2026-03-25
 ---
 
@@ -18,7 +18,7 @@ In the upcoming series of blogposts I'm going to share the results of my researc
 ### Random what? - an analogy
  Do you recall the **walkman** and how much fun it was to find that one track on your mix tape? The **Discman** (with anti-shock ;-) is random access.
 
-![The grandfather of the iPod.](./walkman-orange.avif)<br/>
+![The grandfather of the iPod.](./walkman-orange.jpg)<br/>
 Photo by [Florian Schmetz](https://unsplash.com/@floschmaezz) on Unsplash
 
 *Too Young?* You are watching this livestream and you're waiting for a specific topic that should get covered today. The recording is random access.
