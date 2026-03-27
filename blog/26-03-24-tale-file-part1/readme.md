@@ -1,6 +1,7 @@
 ---
   slug: sqlite-on-git-part-1
   tags: [git, zlib, sqlite]
+  authors: [martin-lysk]
 ---
 
 # SQLite on Git, Part I: The .git folder - Falling down the Rabbithole

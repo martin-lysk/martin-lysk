@@ -3,6 +3,7 @@
   tags: [vfs, git, sqlite]
   image: ./walkman-orange.jpg
   date: 2026-03-25
+  authors: [martin-lysk]
 ---
 
 # SQLite on Git, Prologue: Why do we need random access in git
