@@ -32,7 +32,10 @@ const config: Config = {
           // One post per folder structure
           routeBasePath: '/',
           editUrl: undefined,
-          remarkPlugins: [[require('./src/utils/remarkExtractH1.js').remarkExtractH1, { removeH1: true }]],
+          remarkPlugins: [
+            require('./src/utils/remarkGitHubAlerts.js'),
+            [require('./src/utils/remarkExtractH1.js').remarkExtractH1, { removeH1: true }],
+          ],
         } as BlogOptions,
         docs: false,
         theme: {

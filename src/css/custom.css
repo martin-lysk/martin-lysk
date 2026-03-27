@@ -692,3 +692,127 @@ html {
 [data-theme='dark'] img[src$='#gh-light-mode-only'] {
   display: none;
 }
+
+/* === GitHub-Style Alerts === */
+/* Only target GitHub's markdown-alert classes */
+
+.markdown-alert {
+  border: 1px solid transparent;
+  border-left-width: 4px;
+  border-radius: 6px;
+  padding: 16px;
+  margin: 24px 0;
+  background-color: var(--alert-background);
+  border-left-color: var(--alert-border);
+  color: var(--alert-color);
+}
+
+.markdown-alert-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: var(--alert-color);
+}
+
+/* Add GitHub's SVG icons using masks for color tinting */
+.markdown-alert-title::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.markdown-alert-note .markdown-alert-title::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20fill=%22currentColor%22%20d=%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208Zm8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13ZM6.5%207.75A.75.75%200%200%201%207.25%207h1a.75.75%200%200%201%20.75.75v2.75h.25a.75.75%200%200%201%200%201.5h-2a.75.75%200%200%201%200-1.5h.25v-2h-.25a.75.75%200%200%201-.75-.75ZM8%206a1%201%200%201%201%200-2%201%201%200%200%201%200%202Z%22/%3E%3C/svg%3E");;
+}
+
+.markdown-alert-tip .markdown-alert-title::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20fill=%22currentColor%22%20d=%22M8%201.5c-2.363%200-4%201.69-4%203.75%200%20.984.424%201.625.984%202.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621%201.49a.75.75%200%200%201-1.484.211c-.04-.282-.163-.547-.37-.847a8.456%208.456%200%200%200-.542-.68c-.084-.1-.173-.205-.268-.32C3.201%207.75%202.5%206.766%202.5%205.25%202.5%202.31%204.863%200%208%200s5.5%202.31%205.5%205.25c0%201.516-.701%202.5-1.328%203.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751%200%200%201-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304%200-2.06-1.637-3.75-4-3.75ZM5.75%2012h4.5a.75.75%200%200%201%200%201.5h-4.5a.75.75%200%200%201%200-1.5ZM6%2015.25a.75.75%200%200%201%20.75-.75h2.5a.75.75%200%200%201%200%201.5h-2.5a.75.75%200%200%201-.75-.75Z%22/%3E%3C/svg%3E");;
+}
+
+.markdown-alert-important .markdown-alert-title::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20fill=%22currentColor%22%20d=%22M0%201.75C0%20.784.784%200%201.75%200h12.5C15.216%200%2016%20.784%2016%201.75v9.5A1.75%201.75%200%200%201%2014.25%2013H8.06l-2.573%202.573A1.458%201.458%200%200%201%203%2014.543V13H1.75A1.75%201.75%200%200%201%200%2011.25Zm1.75-.25a.25.25%200%200%200-.25.25v9.5c0%20.138.112.25.25.25h2a.75.75%200%200%201%20.75.75v2.19l2.72-2.72a.749.749%200%200%201%20.53-.22h6.5a.25.25%200%200%200%20.25-.25v-9.5a.25.25%200%200%200-.25-.25Zm7%202.25v2.5a.75.75%200%200%201-1.5%200v-2.5a.75.75%200%200%201%201.5%200ZM9%209a1%201%200%201%201-2%200%201%201%200%200%201%202%200Z%22/%3E%3C/svg%3E");;
+}
+
+.markdown-alert-warning .markdown-alert-title::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20fill=%22currentColor%22%20d=%22M6.457%201.047c.659-1.234%202.427-1.234%203.086%200l6.082%2011.378A1.75%201.75%200%200%201%2014.082%2015H1.918a1.75%201.75%200%200%201-1.543-2.575Zm1.763.707a.25.25%200%200%200-.44%200L1.698%2013.132a.25.25%200%200%200%20.22.368h12.164a.25.25%200%200%200%20.22-.368Zm.53%203.996v2.5a.75.75%200%200%201-1.5%200v-2.5a.75.75%200%200%201%201.5%200ZM9%2011a1%201%200%201%201-2%200%201%201%200%200%201%202%200Z%22/%3E%3C/svg%3E");;
+}
+
+.markdown-alert-caution .markdown-alert-title::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2016%2016%22%3E%3Cpath%20fill=%22currentColor%22%20d=%22M4.47.22A.749.749%200%200%201%205%200h6c.199%200%20.389.079.53.22l4.25%204.25c.141.14.22.331.22.53v6a.749.749%200%200%201-.22.53l-4.25%204.25A.749.749%200%200%201%2011%2016H5a.749.749%200%200%201-.53-.22L.22%2011.53A.749.749%200%200%201%200%2011V5c0-.199.079-.389.22-.53Zm.84%201.28L1.5%205.31v5.38l3.81%203.81h5.38l3.81-3.81V5.31L10.69%201.5ZM8%204a.75.75%200%200%201%20.75.75v3.5a.75.75%200%200%201-1.5%200v-3.5A.75.75%200%200%201%208%204Zm0%208a1%201%200%201%201%200-2%201%201%200%200%201%200%202Z%22/%3E%3C/svg%3E");;
+}
+
+/* NOTE - Blue */
+.markdown-alert-note {
+  --alert-background: #ddf4ff;
+  --alert-border: #0969da;
+  --alert-color: #0969da;
+}
+
+/* TIP - Green */
+.markdown-alert-tip {
+  --alert-background: #dcffe4;
+  --alert-border: #1a7f37;
+  --alert-color: #1a7f37;
+}
+
+/* IMPORTANT - Purple */
+.markdown-alert-important {
+  --alert-background: #f8ebff;
+  --alert-border: #8250df;
+  --alert-color: #8250df;
+}
+
+/* WARNING - Yellow */
+.markdown-alert-warning {
+  --alert-background: #fff8c5;
+  --alert-border: #9a6700;
+  --alert-color: #9a6700;
+}
+
+/* CAUTION - Red */
+.markdown-alert-caution {
+  --alert-background: #ffebe9;
+  --alert-border: #cf222e;
+  --alert-color: #cf222e;
+}
+
+/* Dark mode alerts */
+[data-theme='dark'] .markdown-alert-note {
+  --alert-background: rgba(56, 139, 253, 0.15);
+  --alert-border: #2f81f7;
+  --alert-color: #58a6ff;
+}
+
+[data-theme='dark'] .markdown-alert-tip {
+  --alert-background: rgba(63, 185, 80, 0.15);
+  --alert-border: #3fb950;
+  --alert-color: #3fb950;
+}
+
+[data-theme='dark'] .markdown-alert-important {
+  --alert-background: rgba(163, 113, 247, 0.15);
+  --alert-border: #a371f7;
+  --alert-color: #a371f7;
+}
+
+[data-theme='dark'] .markdown-alert-warning {
+  --alert-background: rgba(210, 153, 34, 0.15);
+  --alert-border: #d29922;
+  --alert-color: #d29922;
+}
+
+[data-theme='dark'] .markdown-alert-caution {
+  --alert-background: rgba(248, 81, 73, 0.15);
+  --alert-border: #f85149;
+  --alert-color: #f85149;
+}
+
+/* Alert content styling */
+.markdown-alert p:last-child {
+  margin-bottom: 0;
+}
