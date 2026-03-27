@@ -29,13 +29,13 @@ The following section will describe the parts of the .git data structure needed 
 If you are firm with git's underlying data structure already - feel free to jump ahead to the compression section.
 
 
-### Loose object - a snapshot of the content of the file
+### Loose objects - a snapshot of the content of the file
 
 One misconception I had for a long time: Git [does NOT store differences, it stores snapshots](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F?.html#_snapshots_not_differences). What does that mean? Whenever you do a commit, git has a copy of the files content at the point of commit. 
 
 Git creates the snapshot to its internal database in the moment when you add the file to the staging area - the action you do before you commit. 
 
-It does that by creating so called `loose objects`. You find them inside of `.git/objects/` 
+It does that by creating so-called `loose objects`. You find them inside of `.git/objects/` 
 
 So let's play this through - follow those steps: 
 
@@ -81,7 +81,7 @@ pack
 
 As you can see, there are no objects yet - only the `info` and `pack` directories which are empty placeholders.
 
-5. Create an **readme.md** file containing *Hello World*
+5. Create a **readme.md** file containing *Hello World*
 
 <details><summary>
 
@@ -92,7 +92,7 @@ As you can see, there are no objects yet - only the `info` and `pack` directorie
 *(The `-n` flag prevents adding a newline, which would change the hash)*
 </details>
 
-You have now a fresh repo with one file that git doesn't know about just yet. A look into the current `.git` folder only contains two folders for now. 
+You now have a fresh repo with one file that git doesn't know about just yet. A look into the current `.git` folder shows only two folders for now. 
 
 <details><summary>
 
@@ -115,7 +115,7 @@ pack
 *(No output - git add runs silently)*
 </details>
 
-7. Now let's take a look at that objects folder again 
+7. Now let's take a look at that objects folder again. 
 
 <details><summary>
 
@@ -128,7 +128,7 @@ info<br>
 pack
 </details>
 
-We see that a new folder `5e` was created - let's look into that one as well: 
+We see that a new folder `5e` was created - let's look into that one as well. 
 
 <details><summary>
 
@@ -166,7 +166,7 @@ a digital fingerprint. Same content = same hash, always.
 
 `SHA1(Header+"Hello World") -> 5e1c309dae7f45e0f39b1bf3ac3cd9db12e7d689`
 
-> [!note] we gonna look into the Header a bit later
+> [!NOTE] We're gonna look into the Header a bit later
 
 You can generate this unique identifier (hash) yourself by calling a command in git: 
 
@@ -194,9 +194,9 @@ So if we have the content we know its unique identifier (hash) - and if we have 
 ".git/objects/**5e**/**1c309dae7f45e0f39b1bf3ac3cd9db12e7d689**".
 
 > [!NOTE]
-> Git splits the hash after the first two characters and uses those to distribute the files over subfolders named by those characters. git handles thousands of contents - this trick reduces the number of files per folders by factor 256.
+> Git splits the hash after the first two characters and uses those to distribute the files over subfolders named by those characters. git handles thousands of contents - this trick reduces the number of files per folder by a factor of 256.
 
-### The weird ? marks and characters in the file behind the address (not in my head)
+#### The weird characters in the file behind the address
 
 Got it - those 40 characters point to that file but those question marks don't look like `Hello World`. The answer is pretty straightforward here - git compresses the data.  
 
@@ -224,7 +224,7 @@ This means if we have the address of the content (only 40 characters) we can gai
 
 ## Going one step deeper - how git compresses loose objects
 
-> [!info]
+> [!NOTE]
 > Want to see how to decompress git objects with JavaScript? Skip this if you don't
 > have Node.js - I'll show you the result anyway!
 
@@ -236,7 +236,7 @@ Git uses zlib to compress – `deflate` – the loose objects (compare [pro-git-
 
 So let's uncompress (inflate) the object - I'm gonna switch to JavaScript since this is the language most devs will be able to follow, it runs in the browser... many more arguments but the main reason is my Rust skills...
 
-To run this code locally you got to install node [installed](https://nodejs.org/en/download) and pnpm [installed](https://pnpm.io/installation) first.
+To run this code locally you need to install node [installed](https://nodejs.org/en/download) and pnpm [installed](https://pnpm.io/installation) first.
 
 
 <details><summary>
@@ -271,8 +271,8 @@ The header tells us two things:
 
 Git adds a null byte (an invisible character) after the header to separate it from the actual content. This helps git allocate the right amount of memory and verify integrity when inflating the object.
 
-> [!NOTE] 
-> git knows 3 other types `tree`, `commit` and `tag` read more [here](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects)
+> [!NOTE]
+> git knows 3 other types: `tree`, `commit`, and `tag`. Read more [here](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects)
 
 The compression is the reason why reading from the middle or the end of those blobs is not possible. Zlib - the compression algorithm here always deflates from the start to the end and so does inflation work. Git must begin the deflation process always from the start to the point of interest. Since zlib is sequential, partial reads are impossible without decompressing everything up to the bytes you want to read. 
 
@@ -284,5 +284,5 @@ Oh my god... what if I could use the same mechanism with objects in Git?
 
 That's a lead. What followed on this discovery was a sleepless night a deep dive into zLib, an implementation of a block based compression library. 
 
-In the next article we gonna look behind the curtain - look deeper into zLib, look at the implementation my [block based compression library](https://github.com/martin-lysk/talepack/tree/main/packages/zlib-random-access) and use it to random seek into a loose object that is compatible with Git. 
+In the upcoming article we're gonna look behind the curtain - look deeper into zLib, look at the implementation of my [block-based compression library](https://github.com/martin-lysk/talepack/tree/main/packages/zlib-random-access) and use it to random seek into a loose object that is compatible with Git. Stay tuned!
 
