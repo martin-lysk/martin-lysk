@@ -1,7 +1,9 @@
 ---
   slug: sqlite-on-git-part-1
   tags: [git, zlib, sqlite]
+  image: https://upload.wikimedia.org/wikipedia/commons/4/42/The_White_Rabbit_%28Tenniel%29_-_The_Nursery_Alice_%281890%29_-_BL.jpg
   authors: [martin-lysk]
+  
 ---
 
 # SQLite on Git, Part I: The .git folder - Falling down the Rabbithole
