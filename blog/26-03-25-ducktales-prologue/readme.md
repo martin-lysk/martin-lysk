@@ -44,7 +44,7 @@ This requires a filesystem layer backed by **block storage with random access**.
 
 This question sent me down a rabbit hole: looking at how researchers in nucleotide sequence alignments deal with a similar problem, finding a flag in a thirty year old spec of a widely used compression algorithm, unearthing nerdy conversation histories from git creator Linus Torvalds and the maintainers of git and a lot of digital duct tape - and finally how this could solve some scaling issues Git faces today.
 
-If this sounds interesting - stay tuned. 
+If this sounds interesting - [follow me 🐇](../26-03-24-tale-file-part1/readme.md). 
 
 <details>
 <summary>
