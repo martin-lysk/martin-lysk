@@ -26,7 +26,7 @@ Just recently a new usecase evolved.
 
 3. Expressing my thoughts in my Blog. 
 
-While writing my first article "..." the dependency between graphics and the text lead to a lot frustration. Fine-tuning the graphic lead to a easier text, the change in the text made me realize that some information in the graphic is not needed to grasp what should land. 
+While writing my [first article](https://blog.lysk.tech/nfs3-event-side-channel) the dependency between graphics and the text lead to a lot frustration. Fine-tuning the graphic lead to a easier text, the change in the text made me realize that some information in the graphic is not needed to grasp what should land. 
 
 ## The Problem
 
