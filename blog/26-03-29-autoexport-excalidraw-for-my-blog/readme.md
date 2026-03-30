@@ -49,7 +49,9 @@ It took me about 45 seconds.
 
 Automate it :-) . 
 
-![FS events - client side write](https://imgs.xkcd.com/comics/the_general_problem.png)
+![FS events - client side write](https://imgs.xkcd.com/comics/the_general_problem.png)<br>
+Image © <a href="https://xkcd.com/">Randall Munroe, XKCD.com
+
 
 
 ## First approach - the GitHub action
