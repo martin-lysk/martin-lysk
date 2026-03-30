@@ -7,7 +7,7 @@
 
 # How I manage Images for my Blog
 
-*TL:DR;* I use an excalidraw, wrap the elements of interest with a frame, name it with `export_` prefix, my forked [excalidraw extension](https://github.com/martin-lysk/excalidraw-vscode) automatically generates svg's for light and dark mode. 
+*TL;DR* I use an Excalidraw, wrap the elements of interest with a frame, name it with `export_` prefix, my forked [excalidraw extension](https://github.com/martin-lysk/excalidraw-vscode) automatically generates SVGs for light and dark mode. 
 
 <!-- truncate -->
 
@@ -19,14 +19,14 @@
 
 I used Excalidraw a lot in the past.
 
-1. When breaking down a technical problem for my self 
+1. When breaking down a technical problem for myself
 2. When explaining a concept or an architecture to my coworkers. 
 
 Just recently a new usecase evolved. 
 
 3. Expressing my thoughts in my Blog. 
 
-While writing my [first article](https://blog.lysk.tech/nfs3-event-side-channel) the dependency between graphics and the text lead to a lot frustration. Fine-tuning the graphic lead to a easier text, the change in the text made me realize that some information in the graphic is not needed to grasp what should land. 
+While writing my [first article](https://blog.lysk.tech/nfs3-event-side-channel) the dependency between graphics and the text lead to a lot frustration. Fine-tuning the graphic led to an easier text. Changes in the text made me realize that some information in the graphic is not needed to grasp what should land. 
 
 ## The Problem
 
@@ -52,12 +52,12 @@ Automate it :-) .
 ![FS events - client side write](https://imgs.xkcd.com/comics/the_general_problem.png)
 
 
-## First approach - the github action
+## First approach - the GitHub action
 
 ...20 minutes later...
-A bit of bash thanks to  open source (thanks to [JonRC for excalirender](https://github.com/JonRC/excalirender)) - it worked...
+A bit of bash thanks to open source (specifically [JonRC's excalirender](https://github.com/JonRC/excalirender)) - it worked...
 
-A little github action that:
+A little GitHub action that:
 
 1. looks for changed excalidraw files in the last push, 
 2. uses jq to find frames inside of those, 
@@ -67,6 +67,8 @@ A little github action that:
 <details>
 <summary>See code here:
 </summary>
+
+```bash
 name: Export Excalidraw Frames
 
 on:
@@ -191,24 +193,50 @@ jobs:
             Co-Authored-By: Claude <noreply@anthropic.com>"
             git push
           fi
-
+```
 </details>
 
-This worked great enough and I continued working on my article. 
+Awesome! Enough to continued working on my article. 
 
-One Problem though: I needed to push the excalidraw before I saw the images. Worked but reviewing the blogpost locally was only posible with outdated pictures
+### Problems with approach 1
 
-## New approach - Fork excalidraw vscode extension and add auto export
+After working with this approach for some time I faced various issues.
 
-I took some time over the weekend to YOLO coded the missing functionality. I created a fork of the vs code extension of excalidraw which:
+1. The library I used had some rendering bugs (same as [this](https://github.com/Timmmm/excalidraw_export/issues/6) one)
+2. The process involved spinning up an x86 based docker image I couldn't get running on my ARM-based Mac
 
-Checks the open *.excalidraw file for frames prefixed with `export_*`. The extension than automatically exports each frame as two
-separate svg files. One in dark mode, one in light mode. 
+I circumvented 1.) with additional labels added but 2.) broke the whole concept. Not being able to run the export locally meant I needed to push the Excalidraw file to GitHub, wait for the pipeline to finish, and pull the new commit before I could see new images or changes in images reflected.
+
+So the solution kind of worked but reviewing the blog post locally was only possible with outdated images.
+
+## A new Idea: Add auto-export to Excalidraw
+
+What if Excalidraw's VSCode extension would check the open *.excalidraw file for changes and automatically export each frame as two separate SVG files - one in dark mode, one in light mode? 
+
+I took some time with Claude over the weekend to YOLO code. The result:
+
+If I edit my Excalidraw in VSCode, all I need to do to make a section available for my blog post: 
+
+1. wrap the elements with a frame
+2. name the frame like `export_${image_name}` 
+
+The extension will pick up the frame, export it as SVG in dark and light mode, and save two SVGs named `${image_name}.light.exp.svg` and `${image_name}.dark.exp.svg` next to the Excalidraw file.
 
 ### Live preview locally
 
-Now that those images are available locally and update whenever I change a frame in my excalidraw, I can reference them via auto complete and preview in the editor, see them rendered in the Preview tab. 
+Now that those images are available locally and update whenever I change a frame in my Excalidraw, I can reference them via auto-complete and preview in the editor, see them rendered in the Preview tab. 
 
 
 ![export](./use_exported_images.dark.exp.svg#gh-dark-mode-only)
 ![export](./use_exported_images.light.exp.svg#gh-light-mode-only)
+
+
+# Conclusion
+
+I am pretty happy with the result. I spent only a couple of hours including this writeup. Using the tool brings joy since it solves a real pain.
+
+I can't wait to use it extensively in the articles in the making - [SQLite on Git](https://blog.lysk.tech/sqlite-on-git-prologue).
+
+One thing I'm not sure about, though. After talking to others about this approach I could see my approach bringing value to the original Excalidraw extension itself. But I wouldn't create a pull request - since I don't own the code - or rather, I don't want to take ownership. I'm thinking to open an issue, describe the problem and the solution to serve as inspiration instead.  
+
+If others find this useful and play around with it - I created artifacts for the release section in my [GitHub fork](https://github.com/martin-lysk/excalidraw-vscode) that allows others to download and use my extension. For now, that's enough! 
