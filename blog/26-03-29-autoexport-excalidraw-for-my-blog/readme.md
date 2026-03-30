@@ -2,7 +2,7 @@
   slug: excalidraw-frame-export
   tags: [blog, excalidraw, vscode]
   date: 2026-03-29
-  image: ./export.light.exp.svg
+  image: ./export.dark.exp.png
 ---
 
 # How I manage Images for my Blog
