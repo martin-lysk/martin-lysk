@@ -36,6 +36,13 @@ const config: Config = {
             require('./src/utils/remarkGitHubAlerts.js'),
             [require('./src/utils/remarkExtractH1.js').remarkExtractH1, { removeH1: true }],
           ],
+          feedOptions: {
+            type: 'rss',
+            title: 'Martin Lysk Blog RSS Feed',
+            description: 'Personal blog about technology and programming',
+            copyright: `Copyright © ${new Date().getFullYear()} Martin Lysk`,
+            language: 'en',
+          },
         } as BlogOptions,
         docs: false,
         theme: {
