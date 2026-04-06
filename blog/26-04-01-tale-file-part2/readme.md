@@ -8,8 +8,12 @@
 
 # SQLite on Git, Part II: Unlocking Zlib's less known Feature
 
-<img align="right" width="200" src="https://github.com/martin-lysk/martin-lysk/blob/main/blog/26-04-01-tale-file-part2/behind_the_curtain.png?raw=true">
-In the previous post, we followed the white rabbit down into Git's `.git` folder. We understood: Git uses zlib's `deflate` algorithm to compress objects. zlib prevents us from reading parts of the object without reading the leading content first.
+<img align="right" width="200" src="https://github.com/martin-lysk/martin-lysk/blob/main/blog/26-04-01-tale-file-part2/behind_the_curtain.png?raw=true">  
+
+In the previous post, we followed the white rabbit down into Git's `.git` folder. We understood: Git uses zlib's `deflate` algorithm to compress objects. 
+
+**The Problem:** The zlib compression prevents us from reading parts of the object without reading the leading content first. For an sqlite database of 100 Mb this results in reading the whole file to access a single row.  
+
 For an sqlite database of 100 Mb this results in reading the whole file to access a single row.
 
 In this article we're going to build a mental model on how zlib compresses and we're going to use `Z_FULL_FLUSH` to compress data in a way which is compatible with Git and allows us to random access data in objects stored in git.
