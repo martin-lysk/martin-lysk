@@ -2,7 +2,7 @@
   slug: sqlite-on-git-prologue
   tags: [vfs, git, sqlite]
   image: ./walkman-orange.jpg
-  date: 2026-03-25
+  date: 2026-03-23
   authors: [martin-lysk]
 ---
 
