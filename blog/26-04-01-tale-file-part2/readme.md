@@ -12,9 +12,8 @@
 
 In the previous post, we followed the white rabbit down into Git's `.git` folder. We understood: Git uses zlib's `deflate` algorithm to compress objects. 
 
-**The Problem:** The zlib compression prevents us from reading parts of the object without reading the leading content first. For an sqlite database of 100 Mb this results in reading the whole file to access a single row.  
+**The Problem:** Each range of zlib-compressed data depends on reading all the data before it. A 1Gb sqlite database compressed with zlib must read the whole file to access a single row[^1].
 
-For an sqlite database of 100 Mb this results in reading the whole file to access a single row.
 
 In this article we're going to build a mental model on how zlib compresses and we're going to use `Z_FULL_FLUSH` to compress data in a way which is compatible with Git and allows us to random access data in objects stored in git.
 
@@ -353,3 +352,5 @@ This is a good **start**, now that we can access subsets of the file we need to 
 SQLite has the concept of a [VFS](https://sqlite.org/vfs.html) which allows us to transform data from the format, sqlite expects to the data layout on disc. 
 
 In the upcoming article we're gonna find a little bottle labeled "DRINK ME" - we're gonna grow the data back into the format and size so it suits sqlite with the help of a virtual filesystem. 
+
+[^1]: Thanks [Mike Toomim](https://invisible.college/@toomim) for the grisp problem statment 
