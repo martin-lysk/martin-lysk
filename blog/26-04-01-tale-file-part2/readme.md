@@ -33,7 +33,7 @@ Let's take the following sentence as an example.
 
 You can express the same text like this:
 
-`Hi beautiful World, what a [4,15] we live in, how you are doing on this [4,15]?`
+`Hi beautiful World, how you are doing on this [4,15], what a [4,15] to live on`
 
 See how the text got smaller by expressing `beautiful World` by pointing to its first occurrence (character `[4,`) and its length (`15]`)? 
 
