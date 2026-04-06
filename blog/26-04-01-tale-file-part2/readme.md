@@ -93,7 +93,7 @@ While the compression is not as good as before - we can now independently access
 ![Deflation](./block_random_access.light.exp.svg#gh-light-mode-only)
 
 
-Funfact: This approach is also used in git itself already 
+Funfact: This approach is also used in git itself already and discussed by Linus Torvalds - the the creator himself. 
 
 > \<linus\> In particular, while the pack-file is then compressed,
     it's compressed just one object at a time, so the actual
@@ -103,7 +103,7 @@ Funfact: This approach is also used in git itself already
 
 see [pack-heuristics.adoc](https://github.com/git/git/blob/master/Documentation/technical/pack-heuristics.adoc)
 
-> [NOTE] the random access that is described here is referring to accessing whole objects in git and won't help us for accessing just parts of the objects.
+> [!NOTE] the random access that is described here is referring to accessing whole objects in git and won't help us for accessing just parts of the objects.
 
 
 ## The problem
