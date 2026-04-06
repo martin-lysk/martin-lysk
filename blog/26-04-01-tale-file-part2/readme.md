@@ -1,7 +1,7 @@
 ---
   slug: sqlite-on-git-part-2
   tags: [git, zlib, compression, Z_FULL_FLUSH]
-  date: 2026-04-6
+  date: 2026-04-06
   image: https://github.com/martin-lysk/martin-lysk/blob/main/blog/26-04-01-tale-file-part2/behind_the_curtain.png?raw=true
   authors: [martin-lysk]
 ---
@@ -9,7 +9,10 @@
 # SQLite on Git, Part II: Unlocking Zlib's less known Feature
 
 <img align="right" width="200" src="https://github.com/martin-lysk/martin-lysk/blob/main/blog/26-04-01-tale-file-part2/behind_the_curtain.png?raw=true">
-In the previous post, we followed the white rabbit down into Git's `.git` folder. We understood: Git uses zlib's `deflate` algorithm to compress objects. zlib prevents us from reading parts of the object without reading the leading content first. In this article we're going to take a look at zlib's `Z_FULL_FLUSH` parameter, which allows genomic researchers to do exactly that with 100GB+ files - while zlib compressed, they managed to only read the part they need. We're going to use the same technique to access only parts of a blob stored in git.
+In the previous post, we followed the white rabbit down into Git's `.git` folder. We understood: Git uses zlib's `deflate` algorithm to compress objects. zlib prevents us from reading parts of the object without reading the leading content first.
+For an sqlite database of 100 Mb this results in reading the whole file to access a single row.
+
+In this article we're going to build a mental model on how zlib compresses and we're going to use `Z_FULL_FLUSH` to compress data in a way which is compatible with Git and allows us to random access data in objects stored in git.
 
 
 <!-- truncate -->
@@ -18,10 +21,10 @@ In the previous post, we followed the white rabbit down into Git's `.git` folder
 
 If you're just joining us, here's the quick recap:
 
-- **Prologue**: We established why random access matters—it's essential for running SQLite databases on top of Git's storage
-- **Part 1**: We explored Git's `.git` folder, learned how loose objects are stored, and discovered that `Z_FULL_FLUSH` could be the key to enabling random access.
+- [**Prologue**](../26-03-23-ducktales-prologue/readme.md): We looked at *random access*, what it is,  and why it is essential for running SQLite databases on top of Git's storage
+- [**Part 1**](../26-03-24-tale-file-part1/readme.md): We explored Git's `.git` folder, learned how loose objects are stored, and discovered that `Z_FULL_FLUSH` could be the key to enabling random access.
 
-Let's look behind the curtain of zlib and see how we can utilize `Z_FULL_FLUSH`
+Let's look behind the curtain of **zlib** the compression library used by Git's storage layer and get a step closer to *random access*.
 
 ## Understanding sequential compression
 
@@ -55,15 +58,15 @@ This is - simplified - what zlib does, it reads data coming in, finds repetitive
 Okay what is the point - just read the 62 Characters... Remember why we are doing all of this - a sqlite database file can grow over hundreds of megabytes of size - reading just a particular row must not require a read of the whole file.
 
 
-> [NOTE!]
+> [!NOTE]
 > What I outline here is extremely simplified description of zlib - it should be just enough to follow the article. If you want to understand it better I suggest reading [Understanding zlib](https://www.euccas.me/zlib/) by Euccas Chen.
 
 
 ## Compress in blocks
 
-A common approach to deal with this is to not compress the data as a whole - If we define blocks of content that we always want to access independently we can compress each block individually. This ensures later blocks don't reference back to data from previous blocks and we can access the content of those blocks without knowing the other blocks.
+A common approach to deal with this and allow reading data partially is to not compress the data as a whole. If we define blocks of content that we always want to access independently we can compress each block individually. This ensures later blocks don't reference back to data from previous blocks and we can access the content of those blocks without knowing the other blocks.
 
-Lets take the previous example:
+Let's take the previous example:
 
 `Hi beautiful World, how you are doing on this beautiful World, what a beautiful World to live on.`
 
@@ -105,15 +108,20 @@ see [pack-heuristics.adoc](https://github.com/git/git/blob/master/Documentation/
 
 ## The problem
 
-While independent block deflation worked for Linus inside of the pack file, defining it's format - this is not an option for us we just don't control the binary layout of git's internal files - we have to deal with a given format.
 
-If we compress separate blocks we would end up having multiple deflated chunks `deflate(block1)` and `deflate(block2)`, while we could concatenate them to produce one file, when git inflates the objects it expects **one continuous stream** and it would refuse to consume our block based deflated data.
+If we compress separate blocks we end up having multiple deflated chunks `deflate(block1)` and `deflate(block2)`, we can't just concatenate those chunks (the approach Linus took when designing the pack file format) because Git wouldn't just magically consume it.
+
+While independent block deflation worked for Linus Torvalds inside of the pack file because he defined the format and controls how it is read - this is not an option for us... we just don't control the binary layout of git's internal files - we have to deal with the format given.
+
+When git inflates the objects it expects **one continuous stream** and it would refuse to consume our block based deflated data. This is where `Z_FULL_FLUSH` comes into play.
 
 ## The Solution - `Z_FULL_FLUSH`
 
 The `Z_FULL_FLUSH` allows us to do block based compression within a single compression stream. By passing `Z_FULL_FLUSH` as the second parameter to the compression algorithm - we can tell Zlib to reset its compression state. 
 
 > If flush is set to Z_FULL_FLUSH, all output is flushed as with Z_SYNC_FLUSH, and the compression state is reset so that decompression can restart from this point if previous compressed data has been damaged or if **random access** is desired. Using Z_FULL_FLUSH too often can seriously degrade compression.
+
+It's written in plainsight the flag exists for **random access** and I was not the first to discover that - as stated earlier I took inspirations from a blog post by Hengs Li Random [access to zlib compressed files](https://lh3.github.io/2014/07/05/random-access-to-zlib-compressed-files) writing about an approach used by Genomic researchers to access huge files.
 
 **Mental model**: Passing `Z_FULL_FLUSH` is like asking Zlib to "Forget everything you have seen before". By doing that Zlib won't back-reference to any data before the Z_FULL_FLUSH was sent. 
 
@@ -137,7 +145,7 @@ Why this is so great: if we can recompress the objects in git's object store wit
 
 ## In practice
 
-This sounds too good to be true - totally hooked I took a look at existing zlib libraries in Javascript and found pako. It looked pretty promising but while it allows you to push chunks:
+This sounds too good to be true - totally hooked I took a look at existing zlib libraries in Javascript and found [pako](https://github.com/nodeca/pako). It looked pretty promising but while it allows you to push chunks:
 
 ```javascript
 const deflator = new pako.Deflate();
@@ -148,16 +156,16 @@ deflator.push(", what a beautiful World to live on.");
 
 `Z_FULL_FLUSH` is not exposed via the given API.
 
-So I extended pako to do just that - compare link to repo.
+So I extended pako to do just that (compare [`ChunkBlockDeflate`](https://github.com/martin-lysk/talepack/blob/main/packages/zlib-random-access/src/ChunkBlockDeflate.ts)).
 
-To test my hypothesis I wrote a little vitest.
+To test my hypothesis I wrote a little [test](https://github.com/martin-lysk/talepack/blob/main/packages/git-random-access/src/loose-object-test/repacked-loose-object.test.ts) in vitest which:
 
-1. Create a normal git object containing `Hi beautiful World, how you are doing on this beautiful World, what a beautiful World to live on.`
-2. Read the deflated blob content and inflate it using pako and split the content into `header`, `block 1` and `block 2`
-3. Create a ChunkBlockDeflator and push the header, then push block 1, then push block 2 with `Z_FULL_FLUSH`
-4. Store the deflated result back into the blob
-5. Check if `git cat-file` still reads the object
-6. Read the deflated bytes from block 2 and inflate them independently
+1. create a normal git object containing `Hi beautiful World, how you are doing on this beautiful World, what a beautiful World to live on.`
+2. read the deflated blob content and inflate it using pako and split the content into `header`, `block 1` and `block 2`
+3. create a ChunkBlockDeflator and push the header, then push block 1, then push block 2 with `Z_FULL_FLUSH`
+4. store the deflated result back into the blob
+5. check if `git cat-file` still reads the object
+6. read the deflated bytes from block 2 and inflate them independently
 
 
 <details>
@@ -328,5 +336,16 @@ block2DeflatedString should be: ', what a beautiful World to live on.'
 
 </details>
 </details>
+</br>
 
-To express what I felt after executing it and seeing the full text being printed by `git cat-file` followed by the second block being partially inflated showing `, what a beautiful World to live on.` can only be described by "Down, and down, and down, till she began to wonder if she was going right through the World, so as to come out on the other side!"
+The full text being printed by `git cat-file` followed by the second block being partially inflated showing `, what a beautiful World to live on.` 
+
+**WHAAAAAAT? IT WORKS!** We successfully recompressed a loose object in a way which 1) is git compatible and 2) allows us to read subsets of the file without touching the rest of the file.
+
+> "Down, and down, and down, till she began to wonder if she was going right through the World, so as to come out on the other side!" 
+
+This is a good **start**, now that we can access subsets of the file we need to find a way to give sqlite access to those objects - sqlite can't just read those Git loose objects it expects the content of the sqlite file to be decompressed. 
+
+SQLite has the concept of a [VFS](https://sqlite.org/vfs.html) which allows us to transform data from the format, sqlite expects to the data layout on disc. 
+
+In the upcoming article we're gonna find a little bottle labeled "DRINK ME" - we're gonna grow the data back into the format and size so it suits sqlite with the help of a virtual filesystem. 
