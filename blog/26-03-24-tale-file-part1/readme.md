@@ -1,6 +1,7 @@
 ---
   slug: sqlite-on-git-part-1
   tags: [git, zlib, sqlite]
+  date: 2026-03-24
   image: https://upload.wikimedia.org/wikipedia/commons/4/42/The_White_Rabbit_%28Tenniel%29_-_The_Nursery_Alice_%281890%29_-_BL.jpg
   authors: [martin-lysk]
   
