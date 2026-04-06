@@ -2,13 +2,13 @@
   slug: sqlite-on-git-part-2
   tags: [git, zlib, compression, Z_FULL_FLUSH]
   date: 2026-04-6
-  image: https://upload.wikimedia.org/wikipedia/commons/4/42/The_White_Rabbit_%28Tenniel%29_-_The_Nursery_Alice_%281890%29_-_BL.jpg
+  image: https://github.com/martin-lysk/martin-lysk/blob/main/blog/26-04-01-tale-file-part2/behind_the_curtain.png?raw=true
   authors: [martin-lysk]
 ---
 
 # SQLite on Git, Part II: Unlocking Zlib's less known Feature
 
-<img align="right" width="200" src="./behind_the_curtain.png">
+<img align="right" width="200" src="https://github.com/martin-lysk/martin-lysk/blob/main/blog/26-04-01-tale-file-part2/behind_the_curtain.png?raw=true">
 In the previous post, we followed the white rabbit down into Git's `.git` folder. We understood: Git uses zlib's `deflate` algorithm to compress objects. zlib prevents us from reading parts of the object without reading the leading content first. In this article we're going to take a look at zlib's `Z_FULL_FLUSH` parameter, which allows genomic researchers to do exactly that with 100GB+ files - while zlib compressed, they managed to only read the part they need. We're going to use the same technique to access only parts of a blob stored in git.
 
 
