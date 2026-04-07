@@ -16,7 +16,7 @@ We'll explore how git stores your code in `loose objects` and discover a flag in
 
 ## What has happened so far
 
-In the prologue, I explained why random access matters—the ability to read specific parts of files stored in Git without decompressing the entire thing—which is essential for running SQLite databases on top of Git's storage.
+In the [**prologue**](../26-03-23-ducktales-prologue/readme.md), I explained why random access matters—the ability to read specific parts of files stored in Git without decompressing the entire thing—which is essential for running SQLite databases on top of Git's storage.
 
 Now that we have done the sane reasoning part - let's go crazy.
 
@@ -288,5 +288,5 @@ Oh my god... what if I could use the same mechanism with objects in Git?
 
 That's a lead. What followed on this discovery was a sleepless night a deep dive into zLib, an implementation of a block based compression library. 
 
-In the upcoming article we're gonna look behind the curtain - look deeper into zLib, look at the implementation of my [block-based compression library](https://github.com/martin-lysk/talepack/tree/main/packages/zlib-random-access) and use it to random seek into a loose object that is compatible with Git. Stay tuned!
+In [**Part II**](../26-04-01-tale-file-part2/readme.md) we're gonna look behind the curtain - look deeper into zLib, look at the implementation of my [block-based compression library](https://github.com/martin-lysk/talepack/tree/main/packages/zlib-random-access) and use it to random seek into a loose object that is compatible with Git. Stay tuned!
 
