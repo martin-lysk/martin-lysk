@@ -693,6 +693,28 @@ html {
   display: none;
 }
 
+/* Excalidraw player theme visibility */
+[data-theme='light'] .excalidraw-player.gh-dark-mode-only,
+[data-theme='dark'] .excalidraw-player.gh-light-mode-only {
+  display: none !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Excalidraw play button opacity states */
+.excalidraw-play-btn {
+  opacity: 0.2;
+  transition: opacity 0.2s ease;
+}
+
+.excalidraw-player:hover .excalidraw-play-btn {
+  opacity: 0.7;
+}
+
+.excalidraw-play-btn:hover {
+  opacity: 1 !important;
+}
+
 /* === GitHub-Style Alerts === */
 /* Only target GitHub's markdown-alert classes */
 
