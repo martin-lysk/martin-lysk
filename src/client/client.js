@@ -221,17 +221,17 @@ function initExcalidrawPlayers() {
         animatedImg.src = '';
         setTimeout(() => {
           animatedImg.src = originalAnimatedSrc;
+          isPreloaded = true;
         }, 10);
       }
 
       // Calculate total animation duration and reset to static image after it completes
-      calculateAnimationDuration(animatedImg.src).then(totalDuration => {
+      calculateAnimationDuration(originalAnimatedSrc).then(totalDuration => {
         console.log('Total animation duration:', totalDuration, 'ms');
         // Reset to static image after animation completes
         setTimeout(() => {
           resetToStaticImage(staticImg, animatedImg, playButton);
           isPlaying = false;
-          isPreloaded = false;
         }, totalDuration);
       }).catch(err => {
         console.warn('Could not calculate animation duration:', err);
@@ -239,7 +239,6 @@ function initExcalidrawPlayers() {
         setTimeout(() => {
           resetToStaticImage(staticImg, animatedImg, playButton);
           isPlaying = false;
-          isPreloaded = false;
         }, 10000);
       });
     });
@@ -248,16 +247,6 @@ function initExcalidrawPlayers() {
     playButton.addEventListener('mouseenter', () => {
       playButton.style.backgroundColor = 'rgba(0, 0, 0, 0.85)';
       playButton.style.transform = 'translate(-50%, -50%) scale(1.1)';
-
-      // Preload the animated SVG to avoid flicker on click
-      if (!isPreloaded) {
-        const originalAnimatedSrc = animatedImg.src;
-        animatedImg.src = '';
-        setTimeout(() => {
-          animatedImg.src = originalAnimatedSrc;
-          isPreloaded = true;
-        }, 10);
-      }
     });
 
     playButton.addEventListener('mouseleave', () => {
