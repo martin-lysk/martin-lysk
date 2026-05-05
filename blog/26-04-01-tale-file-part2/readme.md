@@ -44,16 +44,16 @@ You can express the same text like this:
 See how the text got smaller by expressing `beautiful World` by pointing to its first occurrence (character `[4,`) and its length (`15]`)? 
 
 
-![Defalation](./deflation.dark.exp.svg#gh-dark-mode-only)
-![Deflation](./deflation.light.exp.svg#gh-light-mode-only)
+![Defalation](./deflation.anim.dark.exp.svg#gh-dark-mode-only)
+![Deflation](./deflation.anim.light.exp.svg#gh-light-mode-only)
 
 By referencing repetitive sequences of characters, you can reduce the size of the original text while still being able to recreate the original text. 
 
 But what happens if I only want to read the part of the sentence after the second `,`? Reading ` what a [4,15] we live in?` doesn't make sense - the reference `[4,15]` is wrong/can't be resolved. To resolve it we have to know `Hi beautiful World` first - we have to read the whole sentence from the very beginning. 
 
 
-![Defalation](./random_access.dark.exp.svg#gh-dark-mode-only)
-![Deflation](./random_access.light.exp.svg#gh-light-mode-only)
+![Defalation](./random_access.anim.dark.exp.svg#gh-dark-mode-only)
+![Deflation](./random_access.anim.light.exp.svg#gh-light-mode-only)
 
 
 This is - simplified - what zlib does, it reads data coming in, finds repetitive sequences and replaces them with references of previous occurrences. 
@@ -86,14 +86,14 @@ and
 `, what a beautiful World to live on.`
 
 
-![Defalation](./block_deflation.dark.exp.svg#gh-dark-mode-only)
-![Deflation](./block_deflation.light.exp.svg#gh-light-mode-only)
+![Defalation](./block_deflation.anim.dark.exp.svg#gh-dark-mode-only)
+![Deflation](./block_deflation.anim.light.exp.svg#gh-light-mode-only)
 
 While the compression is not as good as before - we can now independently access the two blocks and read `, what a beautiful World to live on.` without reading the first part of the sentence. 
 
 
-![Defalation](./block_random_access.dark.exp.svg#gh-dark-mode-only)
-![Deflation](./block_random_access.light.exp.svg#gh-light-mode-only)
+![Defalation](./block_random_access.anim.dark.exp.svg#gh-dark-mode-only)
+![Deflation](./block_random_access.anim.light.exp.svg#gh-light-mode-only)
 
 
 Funfact: This approach is also used in git itself already and discussed by Linus Torvalds - the the creator himself. 
@@ -135,12 +135,17 @@ Let's look at our example a last time.
  Instead of deflating them independently - we start deflating *Block 1* and when we continue with *Block 2* we just pass a `Z_FULL_FLUSH` together with the data. 
 
 
-![Defalation](./fluhsed_deflation.dark.exp.svg#gh-dark-mode-only)
-![Deflation](./fluhsed_deflation.light.exp.svg#gh-light-mode-only)
+![Defalation](./flushed_deflation.anim.dark.exp.svg#gh-dark-mode-only)
+![Deflation](./flushed_deflation.anim.light.exp.svg#gh-light-mode-only)
 
 This results in a 100% Zlib compatible continuous compression stream with flushpoints after each block which allows us to access them independently. 
 
 We just need to know the end of each block to jump to in the compressed data. 
+
+
+
+![Defalation](./flush_random_access.anim.dark.exp.svg#gh-dark-mode-only)
+![Deflation](./flush_random_access.anim.light.exp.svg#gh-light-mode-only)
 
 A quick skim through the sources of Git looks promising: https://github.com/git/git/blob/master/git-zlib.c and https://github.com/git/git/blob/master/compat/zlib-compat.h only reference the standard zlib library - as long as the compressed data is zlib compatible Git should be fine with it. 
 

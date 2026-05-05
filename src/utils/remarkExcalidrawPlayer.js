@@ -45,11 +45,21 @@ function remarkExcalidrawPlayer() {
           if (srcAttr && srcAttr.value) {
             console.log('Src attr type:', srcAttr.value.type);
             let originalPath = null;
+            let themeMode = null;
 
             // Extract the original relative path from the webpack require
             if (srcAttr.value.type === 'mdxJsxAttributeValueExpression') {
               const valueStr = srcAttr.value.value || '';
-              console.log('Src value:', valueStr.substring(0, 150));
+              console.log('Src value length:', valueStr.length);
+              console.log('Src value (last 200 chars):', valueStr.slice(-200));
+
+              // Check for #gh-light-mode-only or #gh-dark-mode-only in the require
+              const themeModeMatch = valueStr.match(/#(gh-light-mode-only|gh-dark-mode-only)/);
+              if (themeModeMatch) {
+                themeMode = themeModeMatch[1];
+                console.log('✓ Found theme mode:', themeMode);
+              }
+
               // Extract the path from: require("loader!./demo.anim.light.exp.svg")
               // The webpack require can have multiple loaders separated by !
               const pathMatch = valueStr.match(/!.*\.(.*)\.anim\.(dark|light)\.exp\.svg/);
@@ -123,6 +133,14 @@ function remarkExcalidrawPlayer() {
 
                 // Wrap both images in a div
                 if (parent && typeof index === 'number') {
+                  // Build className based on theme mode
+                  const classNames = ['excalidraw-player'];
+                  if (themeMode === 'gh-light-mode-only') {
+                    classNames.push('gh-light-mode-only');
+                  } else if (themeMode === 'gh-dark-mode-only') {
+                    classNames.push('gh-dark-mode-only');
+                  }
+
                   const wrapperDiv = {
                     type: 'mdxJsxFlowElement',
                     name: 'div',
@@ -130,7 +148,7 @@ function remarkExcalidrawPlayer() {
                       {
                         type: 'mdxJsxAttribute',
                         name: 'className',
-                        value: 'excalidraw-player',
+                        value: classNames.join(' '),
                       },
                     ],
                     children: [staticImgNode, node],

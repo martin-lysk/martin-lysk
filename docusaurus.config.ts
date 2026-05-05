@@ -35,6 +35,7 @@ const config: Config = {
           remarkPlugins: [
             require('./src/utils/remarkGitHubAlerts.js'),
             [require('./src/utils/remarkExtractH1.js').remarkExtractH1, { removeH1: true }],
+            require('./src/utils/remarkExcalidrawPlayer.js').remarkExcalidrawPlayer,
           ],
           feedOptions: {
             type: 'rss',
@@ -139,6 +140,8 @@ const config: Config = {
   // Support relative images
   plugins: [],
   themes: ['@docusaurus/theme-mermaid'],
+  // Client modules for client-side enhancements
+  clientModules: [require.resolve('./src/client/client.js')],
 };
 
 export default config;

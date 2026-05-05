@@ -99,6 +99,28 @@ function initExcalidrawPlayers() {
 
     // Find both images (rendered by MDX)
     const imgs = playerContainer.querySelectorAll('img');
+
+    // Check if this player uses GitHub-style theme classes
+    // First check if the class is already set by the remark plugin
+    let hasGhLightModeOnly = playerContainer.classList.contains('gh-light-mode-only');
+    let hasGhDarkModeOnly = playerContainer.classList.contains('gh-dark-mode-only');
+
+    // If not set by remark plugin, check the image src attributes for the hash
+    if (!hasGhLightModeOnly && !hasGhDarkModeOnly && imgs.length > 0) {
+      const firstImgSrc = imgs[0].src || '';
+      if (firstImgSrc.includes('#gh-light-mode-only')) {
+        hasGhLightModeOnly = true;
+        playerContainer.classList.add('gh-light-mode-only');
+        console.log('✓ Detected gh-light-mode-only from src');
+      } else if (firstImgSrc.includes('#gh-dark-mode-only')) {
+        hasGhDarkModeOnly = true;
+        playerContainer.classList.add('gh-dark-mode-only');
+        console.log('✓ Detected gh-dark-mode-only from src');
+      }
+    }
+
+    const usesGhThemeClasses = hasGhLightModeOnly || hasGhDarkModeOnly;
+
     console.log('Found', imgs.length, 'images');
     console.log('Container HTML:', playerContainer.innerHTML);
 
@@ -130,7 +152,7 @@ function initExcalidrawPlayers() {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: rgba(0, 0, 0, 0.2);
       border: none;
       border-radius: 50%;
       width: 80px;
@@ -156,29 +178,32 @@ function initExcalidrawPlayers() {
     let isPlaying = false;
     let isPreloaded = false;
 
-    // Function to update image URLs based on theme
-    const updateTheme = () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-      const oppositeTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    // Only set up theme switching if not using GitHub-style theme classes
+    if (!usesGhThemeClasses) {
+      // Function to update image URLs based on theme
+      const updateTheme = () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        const oppositeTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-      // Replace theme in URLs
-      if (staticImg.parentNode) {
-        staticImg.src = originalStaticSrc.replace(`.${oppositeTheme}.`, `.${currentTheme}.`);
-      }
-      animatedImg.src = originalAnimatedSrc.replace(`.${oppositeTheme}.`, `.${currentTheme}.`);
-    };
+        // Replace theme in URLs
+        if (staticImg.parentNode) {
+          staticImg.src = originalStaticSrc.replace(`.${oppositeTheme}.`, `.${currentTheme}.`);
+        }
+        animatedImg.src = originalAnimatedSrc.replace(`.${oppositeTheme}.`, `.${currentTheme}.`);
+      };
 
-    // Listen for theme changes
-    const themeObserver = new MutationObserver(() => {
-      if (!isPlaying) {
-        updateTheme();
-      }
-    });
+      // Listen for theme changes
+      const themeObserver = new MutationObserver(() => {
+        if (!isPlaying) {
+          updateTheme();
+        }
+      });
 
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme'],
-    });
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme'],
+      });
+    }
 
     // Play button click handler
     playButton.addEventListener('click', () => {
