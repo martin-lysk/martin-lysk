@@ -178,6 +178,59 @@ function initExcalidrawPlayers() {
     let isPlaying = false;
     let isPreloaded = false;
 
+    // Function to play animation
+    const playAnimation = () => {
+      if (isPlaying) return;
+
+      isPlaying = true;
+
+      if (staticImg.parentNode) {
+        staticImg.style.display = 'none';
+      }
+      animatedImg.style.display = 'block';
+      playButton.style.display = 'none';
+
+      // Always reset the source to restart the animation
+      const originalAnimatedSrc = animatedImg.src;
+      animatedImg.src = '';
+      setTimeout(() => {
+        animatedImg.src = originalAnimatedSrc;
+        isPreloaded = true;
+      }, 10);
+
+      // Calculate total animation duration and reset to static image after it completes
+      calculateAnimationDuration(originalAnimatedSrc).then(totalDuration => {
+        console.log('Total animation duration:', totalDuration, 'ms');
+        // Reset to static image after animation completes
+        setTimeout(() => {
+          resetToStaticImage(staticImg, animatedImg, playButton);
+          isPlaying = false;
+        }, totalDuration);
+      }).catch(err => {
+        console.warn('Could not calculate animation duration:', err);
+        // Fallback: reset after a reasonable default time (10 seconds)
+        setTimeout(() => {
+          resetToStaticImage(staticImg, animatedImg, playButton);
+          isPlaying = false;
+        }, 10000);
+      });
+    };
+
+    // Set up Intersection Observer to auto-play when fully in view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 1.0) {
+          console.log('Image fully in view, auto-playing animation');
+          playAnimation();
+          observer.disconnect(); // Only auto-play once
+        }
+      });
+    }, {
+      threshold: 1.0 // Trigger when 100% of the element is visible
+    });
+
+    observer.observe(playerContainer);
+
     // Only set up theme switching if not using GitHub-style theme classes
     if (!usesGhThemeClasses) {
       // Function to update image URLs based on theme
@@ -207,40 +260,7 @@ function initExcalidrawPlayers() {
 
     // Play button click handler
     playButton.addEventListener('click', () => {
-      isPlaying = true;
-
-      if (staticImg.parentNode) {
-        staticImg.style.display = 'none';
-      }
-      animatedImg.style.display = 'block';
-      playButton.style.display = 'none';
-
-      // If not preloaded yet, force reload the animation
-      if (!isPreloaded) {
-        const originalAnimatedSrc = animatedImg.src;
-        animatedImg.src = '';
-        setTimeout(() => {
-          animatedImg.src = originalAnimatedSrc;
-          isPreloaded = true;
-        }, 10);
-      }
-
-      // Calculate total animation duration and reset to static image after it completes
-      calculateAnimationDuration(originalAnimatedSrc).then(totalDuration => {
-        console.log('Total animation duration:', totalDuration, 'ms');
-        // Reset to static image after animation completes
-        setTimeout(() => {
-          resetToStaticImage(staticImg, animatedImg, playButton);
-          isPlaying = false;
-        }, totalDuration);
-      }).catch(err => {
-        console.warn('Could not calculate animation duration:', err);
-        // Fallback: reset after a reasonable default time (10 seconds)
-        setTimeout(() => {
-          resetToStaticImage(staticImg, animatedImg, playButton);
-          isPlaying = false;
-        }, 10000);
-      });
+      playAnimation();
     });
 
     // Hover effects for play button
