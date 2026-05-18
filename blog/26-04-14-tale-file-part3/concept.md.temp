@@ -1,0 +1,87 @@
+ 
+
+  Working Title
+
+  "SQLite on Git, Part III: Connecting SQLite"
+
+  Structure
+
+  1. What has happened so far (Quick recap)
+
+  - Briefly remind readers: We discovered Z_FULL_FLUSH can enable random access, we used Z_FULL_FLUSH flag to produce a blob that git accepts and allows us to read only parts of the file
+  - The key insight: creating checkpoints in compressed data
+  - Set the stage: Now we need to implement it
+
+  2. Understanding SQLite's 
+
+   2.1. Difference between classical Server database and SQLite
+    - no server part of your application 
+    - direct access to the underlying - includes an interface to replace the exising communication with the filesystem
+   2.2. How Sqlite stores Data
+    - fixed sized pages 
+    - pages build b-tree's that allow to efficiently walk only pages needed
+   2.3 
+   
+
+
+
+  Sqlite is a library not a database deamon. Think of it as node fs to read a file + json parse to bring the object into javascript land. 
+  
+  
+  paged file format
+
+  drop table if exists fun;
+create table fun (
+    id int PRIMARY KEY,
+    word string
+);
+
+import sqlite3
+c = sqlite3.connect("./fun.sqlite")
+with open('/usr/share/dict/words') as f:
+    for i, word in enumerate(f):
+        word = word.strip()
+        word = unicode(word, 'latin1')
+        c.execute("INSERT INTO fun VALUES (?, ?);", (i, word))
+c.commit()
+c.close()
+
+inspiration from https://jvns.ca/blog/2014/09/27/how-does-sqlite-work-part-1-pages/ but instead of recompiling the sqlite sources we gonna use wasm-sqlite and provide it a vfs that allows sqlite to read from and write to an node fs compatible filesystem. 
+
+  3. Allow Sqlite to read a different fileformat 
+
+  2.1 How deflate works normally
+  - Sequential compression explanation
+
+# Understanding SQLite's paged file format
+
+## What is sqlite 
+
+ - quote sqlite's docs
+
+## Why is it so fast a quick look into Sqlites file format
+
+ - quote sqlites docs
+ - image about the page structure 
+
+# connecting Sqlite to git 
+
+ - Our goal to read from git's storage 
+ - We prepared the file to allow random access
+ - Sqlite doesn't accept the file as is - introducing VFS
+   - start with a normal sqlite file via nodejs 
+   - show code of read file 
+   - show read file that understands the blob (header and footer) 
+
+# appending the index 
+
+# what we achived 
+ - writing a sqlite file and commit differnt versions of it to git
+ - redeflate the blob to be able to read it in a fast way using sqlte
+
+# what is still missing
+
+ - the recompression on a blob has two downsides:
+  1. we need to read the whole sqlite once and recompress it 
+  2. git doesn't only use loose objects - it compresses the objects into pack files
+  3. we cant write to the sqlite file 

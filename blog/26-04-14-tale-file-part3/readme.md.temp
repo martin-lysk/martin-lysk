@@ -1,21 +1,22 @@
 ---
-  slug: sqlite-on-git-part-2
+  slug: sqlite-on-git-part-3
   tags: [git, zlib, compression, Z_FULL_FLUSH]
   date: 2026-04-06
   image: https://github.com/martin-lysk/martin-lysk/blob/main/blog/26-04-01-tale-file-part2/behind_the_curtain.png?raw=true
   authors: [martin-lysk]
 ---
 
-# SQLite on Git, Part II: Sqlite reads on git objects
+# SQLite on Git, Part II: Unlocking Zlib's less known Feature
 
-<img align="right" width="200" src="https://github.com/martin-lysk/martin-lysk/blob/main/blog/26-04-14-tale-file-part3/one_pill_makes_you_larger.jpg?raw=true">  
+<img align="right" width="200" src="https://github.com/martin-lysk/martin-lysk/blob/main/blog/26-04-01-tale-file-part2/behind_the_curtain.png?raw=true">  
 
-In the previous post, we looked behind the curtain of **zlib** the compression library. We managed to recompress a loose object from git - fully git compatible - while keeping separate chunks inside of it acceisble indipendtly.
+In the previous post, we followed the white rabbit down into Git's `.git` folder. We understood: Git uses zlib's `deflate` algorithm to compress objects. 
 
-**The Problem:** Even if a Git object contains a perfectly valid SQLite database file, SQLite cannot simply read from it directly, it expects the content of the sqlite file to be decompressed.
+**The Problem:** Each range of zlib-compressed data depends on reading all the data before it. A 1Gb sqlite database compressed with zlib must read the whole file to access a single row[^1].
 
 
-In this article we're going to skretch the surface of Sqlites internals, just enough to build a SQLite VFS (Virtual File System) capable of reading only the parts of the Git blob it actually needs.
+In this article we're going to build a mental model on how zlib compresses and we're going to use `Z_FULL_FLUSH` to compress data in a way which is compatible with Git and allows us to random access data in objects stored in git.
+
 
 <!-- truncate -->
 
@@ -25,47 +26,10 @@ If you're just joining us, here's the quick recap:
 
 - [**Prologue**](../26-03-23-ducktales-prologue/readme.md): We looked at *random access*, what it is,  and why it is essential for running SQLite databases on top of Git's storage
 - [**Part 1**](../26-03-24-tale-file-part1/readme.md): We explored Git's `.git` folder, learned how loose objects are stored, and discovered that `Z_FULL_FLUSH` could be the key to enabling random access.
-- [**Part 2**](../26-04-01-tale-file-part2/readme.md): We looked behind the curtain of **zlib** compression, learned about *sequential compression*, and successfully used `Z_FULL_FLUSH` to create git-compatible objects with *random access* capability.
 
-In this article we're going to stretch the surface of **SQLite's** internals and find a little bottle labeled "DRINK ME" that grows our compressed Git blobs back into the format *SQLite* expects.
+Let's look behind the curtain of **zlib** the compression library used by Git's storage layer and get a step closer to *random access*.
 
-## Understanding SQLite
-
-### Differences between Sqlite and traditional Database
-
-### Sqlites Database file format
-
-https://sqlite.org/fileformat.html
-https://fly.io/blog/sqlite-internals-btree/
-https://dev.to/lovestaco/sqlite-database-file-structure-2dhl
-
-### SQLite Virtual Filesystem
-
-https://sqlite.org/vfs.html
-
-https://github.com/jlongster/absurd-sql
-
-https://www.npmjs.com/package/sqlite-wasm-http
-
-## Reading directly from a git blob
-
-### recompress the sqlite file using zflush
- 
-  - resulting blob 
-  - 
-
-### implementing the vfs
-
-### 
-
-
-## Comparison 
-
- - normal sqlite file 
- - git blob without random acces
- - git blob with radom acces
-
-
+## Understanding sequential compression
 
 Sequential compression is a way of reducing data size where each part depends on what came before it. To read any point, you have to process everything earlier first.
 
@@ -80,16 +44,16 @@ You can express the same text like this:
 See how the text got smaller by expressing `beautiful World` by pointing to its first occurrence (character `[4,`) and its length (`15]`)? 
 
 
-![Defalation](./deflation.anim.dark.exp.svg#gh-dark-mode-only)
-![Deflation](./deflation.anim.light.exp.svg#gh-light-mode-only)
+![Defalation](./deflation.dark.exp.svg#gh-dark-mode-only)
+![Deflation](./deflation.light.exp.svg#gh-light-mode-only)
 
 By referencing repetitive sequences of characters, you can reduce the size of the original text while still being able to recreate the original text. 
 
 But what happens if I only want to read the part of the sentence after the second `,`? Reading ` what a [4,15] we live in?` doesn't make sense - the reference `[4,15]` is wrong/can't be resolved. To resolve it we have to know `Hi beautiful World` first - we have to read the whole sentence from the very beginning. 
 
 
-![Defalation](./random_access.anim.dark.exp.svg#gh-dark-mode-only)
-![Deflation](./random_access.anim.light.exp.svg#gh-light-mode-only)
+![Defalation](./random_access.dark.exp.svg#gh-dark-mode-only)
+![Deflation](./random_access.light.exp.svg#gh-light-mode-only)
 
 
 This is - simplified - what zlib does, it reads data coming in, finds repetitive sequences and replaces them with references of previous occurrences. 
@@ -122,14 +86,14 @@ and
 `, what a beautiful World to live on.`
 
 
-![Defalation](./block_deflation.anim.dark.exp.svg#gh-dark-mode-only)
-![Deflation](./block_deflation.anim.light.exp.svg#gh-light-mode-only)
+![Defalation](./block_deflation.dark.exp.svg#gh-dark-mode-only)
+![Deflation](./block_deflation.light.exp.svg#gh-light-mode-only)
 
 While the compression is not as good as before - we can now independently access the two blocks and read `, what a beautiful World to live on.` without reading the first part of the sentence. 
 
 
-![Defalation](./block_random_access.anim.dark.exp.svg#gh-dark-mode-only)
-![Deflation](./block_random_access.anim.light.exp.svg#gh-light-mode-only)
+![Defalation](./block_random_access.dark.exp.svg#gh-dark-mode-only)
+![Deflation](./block_random_access.light.exp.svg#gh-light-mode-only)
 
 
 Funfact: This approach is also used in git itself already and discussed by Linus Torvalds - the the creator himself. 
@@ -171,17 +135,12 @@ Let's look at our example a last time.
  Instead of deflating them independently - we start deflating *Block 1* and when we continue with *Block 2* we just pass a `Z_FULL_FLUSH` together with the data. 
 
 
-![Defalation](./flushed_deflation.anim.dark.exp.svg#gh-dark-mode-only)
-![Deflation](./flushed_deflation.anim.light.exp.svg#gh-light-mode-only)
+![Defalation](./fluhsed_deflation.dark.exp.svg#gh-dark-mode-only)
+![Deflation](./fluhsed_deflation.light.exp.svg#gh-light-mode-only)
 
 This results in a 100% Zlib compatible continuous compression stream with flushpoints after each block which allows us to access them independently. 
 
 We just need to know the end of each block to jump to in the compressed data. 
-
-
-
-![Defalation](./flush_random_access.anim.dark.exp.svg#gh-dark-mode-only)
-![Deflation](./flush_random_access.anim.light.exp.svg#gh-light-mode-only)
 
 A quick skim through the sources of Git looks promising: https://github.com/git/git/blob/master/git-zlib.c and https://github.com/git/git/blob/master/compat/zlib-compat.h only reference the standard zlib library - as long as the compressed data is zlib compatible Git should be fine with it. 
 

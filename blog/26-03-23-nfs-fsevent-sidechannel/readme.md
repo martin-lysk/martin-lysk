@@ -2,7 +2,7 @@
   slug: nfs3-event-side-channel
   tags: [vfs, nfs3]
   date: 2026-03-23
-  image: ./nfs_sidechannel_write_file-light.svg
+  image: ./nfs_sidechannel_write_file.light.exp.svg
 ---
 
 # Making NFS3 reactive
@@ -17,8 +17,8 @@ The topic outlined here is part of a bigger research on a Gerneral Network Files
 
 Before diving into NFS specifics, let's understand how file system events work in a local environment:
 
-![Regular FS events](./fs_event_file_write-dark.svg#gh-dark-mode-only)
-![Regular FS events](./fs_event_file_write-light.svg#gh-light-mode-only)
+![Regular FS events](./fs_event_file_write.dark.exp.svg#gh-dark-mode-only)
+![Regular FS events](./fs_event_file_write.light.exp.svg#gh-light-mode-only)
 
 1. **Application Write**: An application (e.g., Emacs) writes to a file
 2. **File System Update**: The file system modifies the inode content
@@ -37,8 +37,8 @@ When working with files on an NFS-mounted drive, the event flow becomes more com
 When a change originates from the client itself, the flow works as expected:
 
 
-![FS events - client side write](./fs_event_nfs_clientside_write-dark.svg#gh-dark-mode-only)
-![FS events - client side write](./fs_event_nfs_clientside_write-light.svg#gh-light-mode-only)
+![FS events - client side write](./fs_event_nfs_clientside_write.dark.exp.svg#gh-dark-mode-only)
+![FS events - client side write](./fs_event_nfs_clientside_write.light.exp.svg#gh-light-mode-only)
 
 
 In this scenario, the complete event chain functions correctly. When you work locally on an NFS drive, changes made in Emacs will eventually reach Finder and other observers.
@@ -47,8 +47,8 @@ In this scenario, the complete event chain functions correctly. When you work lo
 
 An issue arises when changes originate from outside the client's local filesystem:
 
-![FS events - client side write](./nfs_remote_change-dark.svg#gh-dark-mode-only)
-![FS events - client side write](./nfs_remote_change-light.svg#gh-light-mode-only)
+![FS events - client side write](./nfs_remote_change.dark.exp.svg#gh-dark-mode-only)
+![FS events - client side write](./nfs_remote_change.light.exp.svg#gh-light-mode-only)
 
 **The Breakdown**: The NFS3 protocol lacks a function to propagate changes on the server back to the client. There is no reverse notification channel, meaning the client remains unaware of changes happening remote.
 
@@ -71,8 +71,8 @@ To address this architectural limitation, below, I describe a way to use a "side
 
 The side channel inserts an additional layer into the NFS server's event processing:
 
-![FS events - client side write](./nfs_sidechannel_write_file-dark.svg#gh-dark-mode-only)
-![FS events - client side write](./nfs_sidechannel_write_file-light.svg#gh-light-mode-only)
+![FS events - client side write](./nfs_sidechannel_write_file.dark.exp.svg#gh-dark-mode-only)
+![FS events - client side write](./nfs_sidechannel_write_file.light.exp.svg#gh-light-mode-only)
 
 ### How It Works
 
