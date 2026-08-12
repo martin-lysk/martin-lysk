@@ -46,6 +46,7 @@ const config: Config = {
           remarkPlugins: [
             require('./src/utils/remarkGitHubAlerts.js'),
             [require('./src/utils/remarkExtractH1.js').remarkExtractH1, { removeH1: true }],
+            require('./src/utils/remarkBookmarkletLinks.js'),
             require('./src/utils/remarkExcalidrawPlayer.js').remarkExcalidrawPlayer,
           ],
           rehypePlugins: [require('./src/utils/rehypeLocalVideoAssets.js')],

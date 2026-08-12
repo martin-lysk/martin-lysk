@@ -72,9 +72,11 @@ if (typeof window !== 'undefined') {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       initExcalidrawPlayers();
+      initBookmarkletLinks();
     });
   } else {
     initExcalidrawPlayers();
+    initBookmarkletLinks();
   }
 }
 
@@ -86,6 +88,7 @@ export function onRouteDidUpdate({ location, previousLocation }) {
 
   // Initialize all Excalidraw players on the page
   initExcalidrawPlayers();
+  initBookmarkletLinks();
 }
 
 function initExcalidrawPlayers() {
@@ -273,5 +276,16 @@ function initExcalidrawPlayers() {
       playButton.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
       playButton.style.transform = 'translate(-50%, -50%) scale(1)';
     });
+  });
+}
+
+function initBookmarkletLinks() {
+  document.querySelectorAll('a[data-bookmarklet]').forEach((link) => {
+    const bookmarklet = link.dataset.bookmarklet;
+    if (bookmarklet?.startsWith('javascript:')) {
+      // React blocks javascript: values during rendering. Setting this DOM
+      // attribute after hydration preserves a real, draggable bookmarklet link.
+      link.setAttribute('href', bookmarklet);
+    }
   });
 }
