@@ -29,7 +29,6 @@ That is absurd—this workflow has been solved for decades by comments and track
 <!-- markleft:block id="bf83a612" -->
 Want to see it in action? [spoiler](#see-it-in-action)
 
-<!-- markleft:block id="bf03f413" -->
 <!-- truncate -->
 
 <!-- markleft:block id="b6b63375" -->
@@ -80,7 +79,6 @@ Perry the pelican found a bright red bicycle leaning against the pier—and, aft
 
 <!-- markleft:block id="ba9bc0b9" -->
 ### Step one: Collecting and formulating the critique
-
 
 <!-- markleft:block id="bb7ca129" -->
 Turning your feedback into useful instructions is already a precision problem.
@@ -154,11 +152,11 @@ This is exactly what *Markleft* provides. It is based on three main components:
 2. A **Markdown-compatible annotation spec** consumable by AI, allowing users to **comment** on text, code, tables, Mermaid diagrams, images, and SVGs, and to propose **suggestions**.
 3. A **prompt** that tells the AI how to address the comments and instructs it to **append suggestions only** in **Markleft**.
 
-<!-- markleft:block id="b5e7b26f" -->
-And a cool name: when you add a remark to Markdown, it becomes a document with a *mark-left*. You can iterate until it becomes *mark-right*—okay, enough.
+<!-- markleft:block id="b2f402e0" -->
+> AI gives you a Mark**down&#x20;**&#x79;ou kick of a bookmar&#x6B;**,&#xA0;**&#x72;eview it as a Mark**up**, when you have remarks - you leave a note and save the Markdown than now has a Mark**left**, you pass it to AI and when it comes back with Suggestions you can check if it got your Mark**righ.&#xA0;**
 
 <!-- markleft:block id="b775f04c" -->
-Markdown remains the document format, and we use the HTML it describes as the workspace around it.
+Markdown remains the document format.
 
 <!-- markleft:block id="b7f5dcf9" -->
 ## Markleft
@@ -187,85 +185,88 @@ The AI composes suggestions and appends them to the Markdown file. The editor de
 <!-- markleft:block id="bdb57c69" -->
 ##### See it in action
 
-<!-- markleft:block id="bb2a4d4a" -->
+<!-- markleft:block id="bebd5d92" -->
 <video controls>
   <source src="./markleft-editor.mp4" type="video/mp4">
 </video>
 
-<!-- markleft:block id="b51892e8" -->
+<!-- markleft:block id="b4f6e267" -->
 ### Markleft - the spec
 
-<!-- markleft:block id="b7001fd2" -->
+<!-- markleft:block id="b6c1119c" -->
 #### Annotations are just Markdown footnotes
 
-<!-- markleft:block id="b2a89e2a" -->
+<!-- markleft:block id="bb2a4d4a" -->
 An annotation—like a comment—consists of two parts: an anchor that identifies what it comments on and the comment itself. Markdown has a concept of footnotes that most Markdown renderers support. An anchor uses the format `[^id-of-the-footnote]`, while its definition appears on a separate line in the format `[^id-of-the-footnote]: body of the footnote`. To encode additional information—such as selected words or x/y coordinates inside an image—we use a schema in the footnote ID itself.
 
-<!-- markleft:block id="b6e11423" -->
+<!-- markleft:block id="b51892e8" -->
 For a text range:
 
-<!-- markleft:block id="b6d8980b" -->
+<!-- markleft:block id="b7001fd2" -->
 ```markdown
 This sentence needs less ceremony.[^range-prev-12-chars-14824-a1b2]
 
 [^range-prev-12-chars-14824-a1b2]: Make this more direct.
 ```
 
-<!-- markleft:block id="b0d7505a" -->
+<!-- markleft:block id="b2a89e2a" -->
 `range-prev-12-chars` says that the annotation covers the previous twelve visible, non-whitespace characters. The remaining components provide identity and a content fingerprint so Markleft can detect when an anchor has become stale.
 
-<!-- markleft:block id="bf48d44f" -->
+<!-- markleft:block id="b6e11423" -->
 Other IDs encode other kinds of anchors:
 
-<!-- markleft:block id="b1645058" -->
+<!-- markleft:block id="b6d8980b" -->
 - `image-X-Y-*` stores normalized image coordinates.
 - `code-line-L-col-C-len-N-*` identifies a code range.
 - `block-*` addresses the containing block.
 - `comment-*` represents a reply to another comment.
 
-<!-- markleft:block id="bfd3d4a8" -->
+<!-- markleft:block id="b0d7505a" -->
 Because the comment is a footnote, Markdown tools preserve it even when they do not understand Markleft. To a normal renderer such as GitHub, it is just a footnote. To the AI and the Markleft editor, it identifies a point on an image or a highlighted sentence inside a text block.
 
-<!-- markleft:block id="bb3bd506" -->
+<!-- markleft:block id="bf48d44f" -->
 #### Stable block IDs make structural changes addressable
 
-<!-- markleft:block id="b4c3e843" -->
+<!-- markleft:block id="b1645058" -->
 To allow suggestions to target blocks reliably, we need stable identifiers. Markleft injects an HTML comment immediately before each real document block:
 
-<!-- markleft:block id="be8a647d" -->
+<!-- markleft:block id="bfd3d4a8" -->
 ```markdown
 <!- - markleft:block id="babf825b" -->
 ```
 
-<!-- markleft:block id="be4673d4" -->
+<!-- markleft:block id="bb3bd506" -->
 #### Suggestions are unreferenced, append-only footnotes
 
-<!-- markleft:block id="b378717c" -->
+<!-- markleft:block id="b4c3e843" -->
 A suggestion is a footnote definition with a reserved ID and intentionally no inline footnote anchor in the original body.
 
-<!-- markleft:block id="b69927ae" -->
+<!-- markleft:block id="be8a647d" -->
 ```markdown
 [^suggestion-s2-update-block-babf825b]: replacement Markdown
 ```
 
-<!-- markleft:block id="b234ca4b" -->
+<!-- markleft:block id="be4673d4" -->
 The ID says:
 
-<!-- markleft:block id="bfe28ed1" -->
+<!-- markleft:block id="b378717c" -->
 - this is suggestion `s2`;
 - the operation is `update`;
 - the target is block `babf825b`. 
 
-<!-- markleft:block id="b72e0eed" -->
+<!-- markleft:block id="b69927ae" -->
 Insert-before, insert-after, and delete operations use the same pattern. The last line of a suggestion body contains footnote anchors for the comments the suggestion addresses; that line is metadata, not part of the proposed content.
 
-<!-- markleft:block id="b2e87a88" -->
+<!-- markleft:block id="b234ca4b" -->
 This is the crucial append-only property: an AI can add a proposal without receiving permission to alter the document it is reviewing.
 
-<!-- markleft:block id="bc2b0da5" -->
+<!-- markleft:block id="bfe28ed1" -->
 ## Give it a try
 
-<!-- markleft:block id="ba9ee8d9" -->
-<!-- You can try the Markleft editor by dropping this link <a href='TODO'>Open in M←</a> into your bookmarks. Drag a MD file into chrome, and press the bookmark. Keep in mind that this is a proof of concept from a vibe-coded weekend project, so expect rough edges.
--->
-Comming soon...
+
+<!-- markleft:block id="bc2b0da5" -->
+1. Or drag this link: [Bookmark](javascript:\(\(\)=%3E%7Bconst%20s=document.createElement\(%22script%22\);s.src=%22https://martin-lysk.github.io/markleft/bookmark.js?%22+Date.now\(\);document.documentElement.append\(s\)%7D\)\(\)) into your chromes bookmark bar.
+2. Open a local Markdown file in chrome and click the bookmark
+
+<!-- markleft:block id="b4e2225e" -->
+Find the source code and a full installation instruction here: <https://github.com/martin-lysk/markleft>
