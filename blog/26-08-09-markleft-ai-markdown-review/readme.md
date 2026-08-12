@@ -1,8 +1,8 @@
 ---
 slug: markleft-ai-markdown-review
 tags: [ai, markdown, review]
-date: 2026-08-04
-image: https://github.com/martin-lysk/martin-lysk/blob/main/blog/26-08-04-markleft-ai-markdown-review/pelican-on-a-bycicle-v2.svg?raw=true
+date: 2026-08-09
+image: https://github.com/martin-lysk/martin-lysk/blob/main/blog/26-08-09-markleft-ai-markdown-review/pelican-on-a-bycicle-v2.svg?raw=true
 authors: [martin-lysk]
 ---
 
