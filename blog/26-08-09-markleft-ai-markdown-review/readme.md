@@ -269,5 +269,5 @@ This is the crucial append-only property: an AI can add a proposal without recei
 ## Give it a try
 
 <!-- markleft:block id="ba9ee8d9" -->
-You can try the Markleft editor by dropping this link into your bookmarks. Keep in mind that this is a small, locally run proof of concept from a vibe-coded weekend project, so expect rough edges.
-
+<!-- You can try the Markleft editor by dropping this link <a href='TODO'>Open in M←</a> into your bookmarks. Drag a MD file into chrome, and press the bookmark. Keep in mind that this is a proof of concept from a vibe-coded weekend project, so expect rough edges.
+Comming soon...
