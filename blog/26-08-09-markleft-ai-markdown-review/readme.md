@@ -30,10 +30,10 @@ That is absurd—this workflow has been solved for decades by comments and track
 Want to see it in action? [spoiler](#see-it-in-action)
 
 <!-- markleft:block id="bf03f413" -->
-\<!-- truncate -->
+<!-- truncate -->
 
 <!-- markleft:block id="b6b63375" -->
-## Working with AI in Markdown and where it breaks
+### Working with AI in Markdown and where it breaks
 
 <!-- markleft:block id="b90e7249" -->
 Let's play through the process of creating a document—and iterate once.
@@ -52,7 +52,6 @@ This results in:
     <thead>
       <tr>
         <th width="50%">Markdown</th>
-        <th width="50%">Rendered</th>
       </tr>
     </thead>
     <tbody>
@@ -72,7 +71,7 @@ and rolled onto the beach—just in time for breakfast.
 ![pelican](./pelican-on-a-bycicle-v1.svg)
 ``` 
 
-</td><td >
+</td></tr><tr><td>Rendered</td></tr><tr><td >
 
  ### A Poor Pelican
 Perry the pelican found a bright red bicycle leaning against the pier—and, after one curious glance, decided it was exactly the sort of adventure the morning required. He wobbled past the fishing boats, rang the tiny bell with his beak, and rolled onto the beach—just in time for breakfast.![pelican](./pelican-on-a-bycicle-v1.svg)
@@ -82,8 +81,6 @@ Perry the pelican found a bright red bicycle leaning against the pier—and, aft
 <!-- markleft:block id="ba9bc0b9" -->
 ### Step one: Collecting and formulating the critique
 
-<!-- markleft:block id="ba9bc0b9" -->
-### Step one: Collecting and formulate the critique
 
 <!-- markleft:block id="bb7ca129" -->
 Turning your feedback into useful instructions is already a precision problem.
@@ -270,4 +267,5 @@ This is the crucial append-only property: an AI can add a proposal without recei
 
 <!-- markleft:block id="ba9ee8d9" -->
 <!-- You can try the Markleft editor by dropping this link <a href='TODO'>Open in M←</a> into your bookmarks. Drag a MD file into chrome, and press the bookmark. Keep in mind that this is a proof of concept from a vibe-coded weekend project, so expect rough edges.
+-->
 Comming soon...

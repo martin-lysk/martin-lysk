@@ -31,12 +31,17 @@ const config: Config = {
           postsPerPage: 10,
           // One post per folder structure
           routeBasePath: '/',
+          // Keep supporting assets and working drafts next to each post without
+          // treating them as separate blog entries.
+          include: ['**/readme.md'],
           editUrl: undefined,
+          processBlogPosts: require('./src/utils/processBlogPostTitles.js'),
           remarkPlugins: [
             require('./src/utils/remarkGitHubAlerts.js'),
             [require('./src/utils/remarkExtractH1.js').remarkExtractH1, { removeH1: true }],
             require('./src/utils/remarkExcalidrawPlayer.js').remarkExcalidrawPlayer,
           ],
+          rehypePlugins: [require('./src/utils/rehypeLocalVideoAssets.js')],
           feedOptions: {
             type: 'rss',
             title: 'Martin Lysk Blog RSS Feed',

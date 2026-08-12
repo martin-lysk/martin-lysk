@@ -335,6 +335,15 @@ a:hover {
   border: 1px solid var(--ifm-border-color);
 }
 
+.markdown video {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: var(--spacing-lg) 0;
+  border: 1px solid var(--ifm-border-color);
+  border-radius: 4px;
+}
+
 .markdown pre {
   background-color: var(--braun-gray-900);
   border-radius: 4px;
