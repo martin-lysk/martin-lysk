@@ -265,7 +265,8 @@ This is the crucial append-only property: an AI can add a proposal without recei
 
 
 <!-- markleft:block id="bc2b0da5" -->
-1. Or drag this link: [Bookmark](javascript:\(\(\)=%3E%7Bconst%20s=document.createElement\(%22script%22\);s.src=%22https://martin-lysk.github.io/markleft/bookmark.js?%22+Date.now\(\);document.documentElement.append\(s\)%7D\)\(\)) into your chromes bookmark bar.
+1. Show the bookmarks bar (⌘⇧B on macOS or Ctrl+Shift+B on Windows/Linux) in chrome
+1. Drag this link: [Bookmark](javascript:\(\(\)=%3E%7Bconst%20s=document.createElement\(%22script%22\);s.src=%22https://martin-lysk.github.io/markleft/bookmark.js?%22+Date.now\(\);document.documentElement.append\(s\)%7D\)\(\)) into chromes bookmark bar.
 2. Open a local Markdown file in chrome and click the bookmark
 
 <!-- markleft:block id="b4e2225e" -->
