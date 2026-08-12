@@ -5,6 +5,13 @@ const config: Config = {
   title: 'Martin Lysk',
   tagline: 'Personal Blog',
   favicon: 'img/favicon.svg',
+  scripts: [
+    {
+      src: 'https://static.cloudflareinsights.com/beacon.min.js',
+      type: 'module',
+      'data-cf-beacon': JSON.stringify({ token: 'de1d5417c44347c59555b5c1fd962d74' }),
+    },
+  ],
 
   url: 'https://blog.lysk.tech',
   baseUrl: '/',
