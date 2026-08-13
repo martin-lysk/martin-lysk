@@ -281,10 +281,14 @@ function initExcalidrawPlayers() {
 
 function initBookmarkletLinks() {
   document.querySelectorAll('a[data-bookmarklet]').forEach((link) => {
-    const bookmarklet = link.dataset.bookmarklet;
+    const bookmarklet = (link.dataset.bookmarklet || '')
+      .replaceAll('%3C', '<')
+      .replaceAll('%3E', '>');
+
     if (bookmarklet?.startsWith('javascript:')) {
       // React blocks javascript: values during rendering. Setting this DOM
       // attribute after hydration preserves a real, draggable bookmarklet link.
+      // The source uses URL escapes so Markdown can safely contain its HTML.
       link.setAttribute('href', bookmarklet);
     }
   });
