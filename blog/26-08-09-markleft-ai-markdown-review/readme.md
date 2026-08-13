@@ -153,7 +153,7 @@ This is exactly what *Markleft* provides. It is based on three main components:
 3. A **prompt** that tells the AI how to address the comments and instructs it to **append suggestions only** in **Markleft**.
 
 <!-- markleft:block id="b2f402e0" -->
-> AI gives you a Mark**down&#x20;**&#x79;ou kick of a bookmar&#x6B;**,&#xA0;**&#x72;eview it as a Mark**up**, when you have remarks - you leave a note and save the Markdown it  has a Mark**left** now, you pass it to AI. It comes back with Suggestions you can check and see if it got your Mark**right.&#xA0;**
+> AI gives you a Mark**down&#x20;**. By clicking a bookmark you can review it as a Mark**up**. You have remarks? Leave a note and save the Markdown. The file has a Mark**left** now. Pass it back to AI. Instead of a rewrite it makes Suggestions you can check and see if they cover your Mark**right.&#xA0;**
 
 <!-- markleft:block id="b775f04c" -->
 Markdown remains the document format.
