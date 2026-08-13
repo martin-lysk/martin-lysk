@@ -7,7 +7,7 @@ authors: [martin-lysk]
 ---
 
 <!-- markleft:block id="bbdef46b" -->
-# Markleft: How I review plans in Markdown
+# Markleft: How I review claude plans in Markdown
 
 <!-- markleft:block id="b25542a4" -->
 AI output seldom meets the intent on the first prompt, so iteration is necessary. Today, iteration usually means providing feedback in a follow-up prompt, which leads to a rewrite of the whole document. The prompt that explains the intent behind the revision remains buried in the chat.
