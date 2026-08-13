@@ -45,7 +45,7 @@ Every change in a graphic in Excalidraw meant 9 clicks in Excalidraw.
 It took me about 45 seconds.
 
 
-# The solution
+## The solution
 
 Automate it :-) . 
 
@@ -54,7 +54,7 @@ Image © <a href="https://xkcd.com/">Randall Munroe, XKCD.com</a>
 
 
 
-## First approach - the GitHub action
+### First approach - the GitHub action
 
 ...20 minutes later...
 A bit of bash thanks to open source (specifically [JonRC's excalirender](https://github.com/JonRC/excalirender)) - it worked...
@@ -200,7 +200,7 @@ jobs:
 
 Awesome! Enough to continued working on my article. 
 
-### Problems with approach 1
+#### Problems with approach 1
 
 After working with this approach for some time I faced various issues.
 
@@ -211,7 +211,7 @@ I circumvented 1.) with additional labels added but 2.) broke the whole concept.
 
 So the solution kind of worked but reviewing the blog post locally was only possible with outdated images.
 
-## A new Idea: Add auto-export to Excalidraw
+### A new Idea: Add auto-export to Excalidraw
 
 What if Excalidraw's VSCode extension would check the open *.excalidraw file for changes and automatically export each frame as two separate SVG files - one in dark mode, one in light mode? 
 
@@ -224,7 +224,7 @@ If I edit my Excalidraw in VSCode, all I need to do to make a section available 
 
 The extension will pick up the frame, export it as SVG in dark and light mode, and save two SVGs named `${image_name}.light.exp.svg` and `${image_name}.dark.exp.svg` next to the Excalidraw file.
 
-### Live preview locally
+#### Live preview locally
 
 Now that those images are available locally and update whenever I change a frame in my Excalidraw, I can reference them via auto-complete and preview in the editor, see them rendered in the Preview tab. 
 
@@ -233,7 +233,7 @@ Now that those images are available locally and update whenever I change a frame
 ![export](./use_exported_images.light.exp.svg#gh-light-mode-only)
 
 
-# Conclusion
+## Conclusion
 
 I am pretty happy with the result. I spent only a couple of hours including this writeup. Using the tool brings joy since it solves a real pain.
 
